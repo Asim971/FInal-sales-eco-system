@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>CONTRIBUTING.md</title>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+    
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+html,footer,header{
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Custom MD PDF CSS
+ */
+html,footer,header{
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+
+ }
+body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+<link rel="stylesheet" href="file:///r%3A/2.Travail/1.Enseignement/Cours/_1.Outils/2.Developpement/1.SCSS/main.css" type="text/css"><link rel="stylesheet" href="file:///d%3A/rdaros/Cours/_1.Outils/2.Developpement/1.SCSS/main.css" type="text/css">
+</head>
+
+<body>
+    <h1 id="contributing-to-anwar-sales-ecosystem">Contributing to Anwar Sales Ecosystem</h1>
+<p>Thank you for your interest in contributing to the Anwar Sales Ecosystem! This document provides guidelines for contributing to this project.</p>
+<h2 id="%F0%9F%A4%9D-how-to-contribute">🤝 How to Contribute</h2>
+<h3 id="1-report-issues">1. <strong>Report Issues</strong></h3>
+<ul>
+<li>Use GitHub Issues to report bugs or suggest features</li>
+<li>Provide clear descriptions and steps to reproduce</li>
+<li>Include relevant system information and error messages</li>
+</ul>
+<h3 id="2-submit-code-changes">2. <strong>Submit Code Changes</strong></h3>
+<ul>
+<li>Fork the repository</li>
+<li>Create a feature branch: <code>git checkout -b feature/your-feature-name</code></li>
+<li>Make your changes following our coding standards</li>
+<li>Test thoroughly using our test suite</li>
+<li>Submit a pull request with a clear description</li>
+</ul>
+<h3 id="3-code-standards">3. <strong>Code Standards</strong></h3>
+<h4 id="javascript-standards"><strong>JavaScript Standards</strong></h4>
+<ul>
+<li>Use descriptive function and variable names</li>
+<li>Add JSDoc comments for all functions</li>
+<li>Follow Google Apps Script best practices</li>
+<li>Handle errors gracefully with try-catch blocks</li>
+</ul>
+<h4 id="documentation-standards"><strong>Documentation Standards</strong></h4>
+<ul>
+<li>Update README.md for significant changes</li>
+<li>Document new functions in API reference</li>
+<li>Include user stories for new features</li>
+<li>Update workflow diagrams if applicable</li>
+</ul>
+<h3 id="4-testing-requirements">4. <strong>Testing Requirements</strong></h3>
+<ul>
+<li>All new features must include tests</li>
+<li>Run existing test suite: <code>runAllTests()</code></li>
+<li>Ensure 100% test coverage for new functions</li>
+<li>Test WhatsApp notifications in development environment</li>
+</ul>
+<h3 id="5-commit-message-format">5. <strong>Commit Message Format</strong></h3>
+<pre class="hljs"><code><div>&lt;type&gt;(&lt;scope&gt;): &lt;subject&gt;
+
+&lt;body&gt;
+
+&lt;footer&gt;
+</div></code></pre>
+<p><strong>Types:</strong></p>
+<ul>
+<li><code>feat</code>: New feature</li>
+<li><code>fix</code>: Bug fix</li>
+<li><code>docs</code>: Documentation changes</li>
+<li><code>test</code>: Adding or updating tests</li>
+<li><code>refactor</code>: Code refactoring</li>
+<li><code>chore</code>: Maintenance tasks</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre class="hljs"><code><div>feat(order): Add automatic dispute escalation
+
+- Implement automatic BDO notification when engineer unavailable
+- Add configurable escalation timeouts
+- Include fallback notification mechanisms
+
+Closes #123
+</div></code></pre>
+<h2 id="%F0%9F%94%A7-development-setup">🔧 Development Setup</h2>
+<h3 id="prerequisites"><strong>Prerequisites</strong></h3>
+<ul>
+<li>Google Apps Script access</li>
+<li>Node.js (for local development tools)</li>
+<li>WhatsApp Business API credentials</li>
+</ul>
+<h3 id="local-development"><strong>Local Development</strong></h3>
+<ol>
+<li>Clone the repository</li>
+<li>Copy <code>.env.example</code> to <code>.env</code> and configure</li>
+<li>Update <code>config.js</code> with your spreadsheet IDs</li>
+<li>Run initial setup: <code>setupProject()</code></li>
+<li>Create test data: <code>createTestData()</code></li>
+</ol>
+<h3 id="testing"><strong>Testing</strong></h3>
+<ul>
+<li>Run all tests: <code>runAllTests()</code></li>
+<li>Test specific modules: <code>runVisitTests()</code>, <code>runOrderTests()</code></li>
+<li>Manual testing using Google Forms</li>
+</ul>
+<h2 id="%F0%9F%93%8B-code-review-process">📋 Code Review Process</h2>
+<h3 id="review-criteria"><strong>Review Criteria</strong></h3>
+<ul>
+<li>Code follows established patterns</li>
+<li>Proper error handling implemented</li>
+<li>Documentation updated</li>
+<li>Tests pass successfully</li>
+<li>Performance impact considered</li>
+</ul>
+<h3 id="review-checklist"><strong>Review Checklist</strong></h3>
+<ul>
+<li><input type="checkbox" id="checkbox0"><label for="checkbox0">Code is readable and well-documented</label></li>
+<li><input type="checkbox" id="checkbox1"><label for="checkbox1">Error handling is comprehensive</label></li>
+<li><input type="checkbox" id="checkbox2"><label for="checkbox2">Tests cover new functionality</label></li>
+<li><input type="checkbox" id="checkbox3"><label for="checkbox3">No security vulnerabilities</label></li>
+<li><input type="checkbox" id="checkbox4"><label for="checkbox4">Performance is acceptable</label></li>
+<li><input type="checkbox" id="checkbox5"><label for="checkbox5">Documentation is updated</label></li>
+</ul>
+<h2 id="%F0%9F%90%9B-bug-reports">🐛 Bug Reports</h2>
+<h3 id="bug-report-template"><strong>Bug Report Template</strong></h3>
+<pre class="hljs"><code><div><span class="hljs-strong">**Bug Description:**</span>
+Clear description of the issue
+
+<span class="hljs-strong">**Steps to Reproduce:**</span>
+<span class="hljs-bullet">1. </span>Step one
+<span class="hljs-bullet">2. </span>Step two
+<span class="hljs-bullet">3. </span>Step three
+
+<span class="hljs-strong">**Expected Behavior:**</span>
+What should happen
+
+<span class="hljs-strong">**Actual Behavior:**</span>
+What actually happens
+
+<span class="hljs-strong">**Environment:**</span>
+<span class="hljs-bullet">- </span>Google Apps Script version
+<span class="hljs-bullet">- </span>Browser used
+<span class="hljs-bullet">- </span>Form/module affected
+
+<span class="hljs-strong">**Error Messages:**</span>
+Include any error messages or logs
+</div></code></pre>
+<h2 id="%F0%9F%92%A1-feature-requests">💡 Feature Requests</h2>
+<h3 id="feature-request-template"><strong>Feature Request Template</strong></h3>
+<pre class="hljs"><code><div><span class="hljs-strong">**Feature Description:**</span>
+Clear description of the proposed feature
+
+<span class="hljs-strong">**User Story:**</span>
+As a [user type], I want [goal] so that [benefit]
+
+<span class="hljs-strong">**Business Justification:**</span>
+Why this feature is needed
+
+<span class="hljs-strong">**Technical Considerations:**</span>
+Any technical requirements or constraints
+
+<span class="hljs-strong">**Acceptance Criteria:**</span>
+<span class="hljs-bullet">- </span>[ ] Criterion 1
+<span class="hljs-bullet">- </span>[ ] Criterion 2
+<span class="hljs-bullet">- </span>[ ] Criterion 3
+</div></code></pre>
+<h2 id="%F0%9F%94%92-security-guidelines">🔒 Security Guidelines</h2>
+<h3 id="security-best-practices"><strong>Security Best Practices</strong></h3>
+<ul>
+<li>Never commit API keys or credentials</li>
+<li>Use environment variables for sensitive data</li>
+<li>Validate all user inputs</li>
+<li>Implement proper access controls</li>
+<li>Follow Google Apps Script security guidelines</li>
+</ul>
+<h3 id="reporting-security-issues"><strong>Reporting Security Issues</strong></h3>
+<ul>
+<li><strong>DO NOT</strong> create public issues for security vulnerabilities</li>
+<li>Email security issues to: [security@anwarsales.com]</li>
+<li>Include detailed description and reproduction steps</li>
+<li>Allow reasonable time for response before disclosure</li>
+</ul>
+<h2 id="%F0%9F%93%9A-resources">📚 Resources</h2>
+<h3 id="documentation"><strong>Documentation</strong></h3>
+<ul>
+<li><a href="README.md">README.md</a> - Complete system documentation</li>
+<li><a href="README.md#api-reference">API Reference</a> - Function documentation</li>
+<li><a href="README.md#user-stories">User Stories</a> - Feature requirements</li>
+</ul>
+<h3 id="development-tools"><strong>Development Tools</strong></h3>
+<ul>
+<li><a href="https://script.google.com/">Google Apps Script</a></li>
+<li><a href="https://developers.google.com/sheets/api">Google Sheets API</a></li>
+<li><a href="https://developers.facebook.com/docs/whatsapp">WhatsApp Business API</a></li>
+</ul>
+<h3 id="community"><strong>Community</strong></h3>
+<ul>
+<li>GitHub Issues for questions and discussions</li>
+<li>Project Wiki for detailed documentation</li>
+<li>Regular contributor meetings (TBD)</li>
+</ul>
+<h2 id="%F0%9F%8E%AF-roadmap">🎯 Roadmap</h2>
+<h3 id="short-term-goals"><strong>Short-term Goals</strong></h3>
+<ul>
+<li>Mobile app integration</li>
+<li>Advanced analytics dashboard</li>
+<li>Performance optimization</li>
+<li>Multi-language support</li>
+</ul>
+<h3 id="long-term-vision"><strong>Long-term Vision</strong></h3>
+<ul>
+<li>AI-powered recommendations</li>
+<li>Machine learning for demand prediction</li>
+<li>Integration with external ERP systems</li>
+<li>Advanced reporting and business intelligence</li>
+</ul>
+<hr>
+<p><strong>Thank you for contributing to the Anwar Sales Ecosystem! Together, we're building a better construction supply chain management system.</strong></p>
+
+</body>
+
+</html>
