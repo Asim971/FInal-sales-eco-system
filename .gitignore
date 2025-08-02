@@ -1,0 +1,81 @@
+# Google Apps Script specific files
+*.clasp.json
+.clasp.json
+
+# Environment variables and sensitive data
+.env
+.env.local
+.env.production
+config.local.js
+secrets.json
+
+# API Keys and credentials
+api-keys.json
+credentials.json
+service-account.json
+
+# Temporary files
+*.tmp
+*.temp
+~$*
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Operating System files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Node.js (if using local development tools)
+node_modules/
+npm-debug.log
+yarn.lock
+package-lock.json
+
+# Google Apps Script deployment files
+.clasp.json
+appsscript.json.backup
+
+# Test output and coverage
+coverage/
+test-results/
+*.test.log
+
+# Documentation build files
+docs/_build/
+docs/dist/
+
+# Backup files
+*.backup
+*.bak
+*_backup.*
+
+# Local development files
+local-config.js
+dev-settings.js
+test-data.json
+
+# Spreadsheet IDs (sensitive)
+spreadsheet-ids.json
+form-ids.json
+
+# WhatsApp API credentials
+whatsapp-config.json
+notification-credentials.json

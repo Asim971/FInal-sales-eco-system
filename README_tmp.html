@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>README.md</title>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+    
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+html,footer,header{
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Custom MD PDF CSS
+ */
+html,footer,header{
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+
+ }
+body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+<link rel="stylesheet" href="file:///r%3A/2.Travail/1.Enseignement/Cours/_1.Outils/2.Developpement/1.SCSS/main.css" type="text/css"><link rel="stylesheet" href="file:///d%3A/rdaros/Cours/_1.Outils/2.Developpement/1.SCSS/main.css" type="text/css">
+</head>
+
+<body>
+    <h1 id="anwar-sales-ecosystem---comprehensive-documentation">Anwar Sales Ecosystem - Comprehensive Documentation</h1>
+<h2 id="%F0%9F%93%8B-table-of-contents">📋 Table of Contents</h2>
+<ol>
+<li><a href="#system-overview">System Overview</a></li>
+<li><a href="#architecture">Architecture</a></li>
+<li><a href="#core-javascript-files">Core JavaScript Files</a></li>
+<li><a href="#business-logic--workflows">Business Logic &amp; Workflows</a></li>
+<li><a href="#user-journeys">User Journeys</a></li>
+<li><a href="#user-stories">User Stories</a></li>
+<li><a href="#api-reference">API Reference</a></li>
+<li><a href="#setup--deployment">Setup &amp; Deployment</a></li>
+<li><a href="#testing">Testing</a></li>
+<li><a href="#troubleshooting">Troubleshooting</a></li>
+</ol>
+<hr>
+<h2 id="%F0%9F%8E%AF-system-overview">🎯 System Overview</h2>
+<p>The <strong>Anwar Sales Ecosystem</strong> is a comprehensive Google Apps Script-based CRM and workflow management system designed for construction material supply chain operations. It manages the entire customer journey from lead generation to order fulfillment, covering:</p>
+<ul>
+<li><strong>Customer Registration &amp; Management</strong> (Engineers, Retailers, Partners)</li>
+<li><strong>Site &amp; Project Management</strong> (Potential Sites, Site Prescriptions)</li>
+<li><strong>Order Processing &amp; Fulfillment</strong> (Orders, Disputes, Tracking)</li>
+<li><strong>Operational Workflows</strong> (Visits, Updates, Approvals)</li>
+<li><strong>Business Operations</strong> (Retailer Points, Demand Generation)</li>
+<li><strong>Automated Notifications</strong> (WhatsApp integration)</li>
+</ul>
+<h3 id="key-business-benefits">Key Business Benefits</h3>
+<ul>
+<li>✅ <strong>Streamlined Operations</strong>: Automated workflows reduce manual intervention</li>
+<li>✅ <strong>Real-time Notifications</strong>: WhatsApp integration ensures instant communication</li>
+<li>✅ <strong>Territory-based Management</strong>: Role-based assignment and routing</li>
+<li>✅ <strong>Comprehensive Tracking</strong>: End-to-end visibility of all operations</li>
+<li>✅ <strong>Scalable Architecture</strong>: Modular design supports growth</li>
+</ul>
+<hr>
+<h2 id="%F0%9F%8F%97%EF%B8%8F-architecture">🏗️ Architecture</h2>
+<h3 id="system-architecture">System Architecture</h3>
+<pre class="hljs"><code><div>┌─────────────────┐    ┌──────────────┐    ┌─────────────────┐
+│   Google Forms  │───▶│ Apps Script  │───▶│ Google Sheets   │
+│   (Data Entry)  │    │ (Processing) │    │ (Data Storage)  │
+└─────────────────┘    └──────────────┘    └─────────────────┘
+                              │
+                              ▼
+                    ┌──────────────────┐
+                    │ WhatsApp Gateway │
+                    │  (Notifications) │
+                    └──────────────────┘
+</div></code></pre>
+<h3 id="technology-stack">Technology Stack</h3>
+<ul>
+<li><strong>Backend</strong>: Google Apps Script (JavaScript)</li>
+<li><strong>Data Storage</strong>: Google Sheets</li>
+<li><strong>Forms</strong>: Google Forms</li>
+<li><strong>Notifications</strong>: WhatsApp API integration</li>
+<li><strong>Triggers</strong>: Time-based and event-based automation</li>
+</ul>
+<h3 id="modular-design">Modular Design</h3>
+<p>The system follows a modular architecture with separate JavaScript files for each business domain:</p>
+<pre class="hljs"><code><div>AnwarSalesEcosystem/
+├── config.js              # Configuration &amp; Constants
+├── triggers.js            # Event Handling &amp; Routing
+├── setup.js              # System Setup &amp; Form Creation
+├── sheets.js             # Data Layer &amp; Sheet Operations
+├── notifications.js      # WhatsApp &amp; Communication
+├── validation.js         # Data Validation &amp; Business Rules
+├── admin.js              # Administrative Functions
+├── crm.js                # CRM Operations &amp; Approvals
+│
+├── Core Business Modules:
+├── engineer.js           # Engineer Registration &amp; Management
+├── retailer.js           # Retailer Operations
+├── partner.js            # Partner &amp; Contractor Management
+├── potential-site.js     # Site Registration &amp; Approval
+├── order.js              # Order Processing &amp; Disputes
+├── visit.js              # Customer Visits &amp; Updates
+├── site-prescription.js  # Site Prescriptions &amp; Recommendations
+├── ihb.js                # IHB (Independent House Builder) Management
+├── retailer-point.js     # Retailer Point Requests
+├── demand-generation.js  # Demand Generation Requests
+│
+└── Testing Modules:
+    ├── test-visit.js
+    ├── test-triggers.js
+    ├── test-order-dispute.js
+    ├── test-retailer-point-asm.js
+    └── test-demand-generation.js
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%93%81-core-javascript-files">📁 Core JavaScript Files</h2>
+<h3 id="1-configjs---system-configuration">1. <strong>config.js</strong> - System Configuration</h3>
+<p><strong>Purpose</strong>: Central configuration management for the entire system.</p>
+<p><strong>Key Functions</strong>:</p>
+<ul>
+<li><code>CONFIG</code> - Main configuration object containing:
+<ul>
+<li><code>SPREADSHEET_IDS</code>: All Google Sheets IDs for data storage</li>
+<li><code>FORMS</code>: Form configurations with fields and validation</li>
+<li><code>SHEET_NAMES</code>: Standardized sheet naming conventions</li>
+<li><code>SCHEMAS</code>: Data structures for each entity type</li>
+<li><code>TRIGGERS</code>: Event handler mapping</li>
+</ul>
+</li>
+</ul>
+<p><strong>Business Logic</strong>:</p>
+<ul>
+<li><strong>Centralized Configuration</strong>: Single source of truth for system settings</li>
+<li><strong>Form Definitions</strong>: Standardized form structures across all modules</li>
+<li><strong>Data Schema Management</strong>: Consistent data structure across sheets</li>
+</ul>
+<p><strong>Use Cases</strong>:</p>
+<ul>
+<li>System initialization and setup</li>
+<li>Form creation and validation</li>
+<li>Data structure consistency</li>
+<li>Multi-environment configuration management</li>
+</ul>
+<hr>
+<h3 id="2-triggersjs---event-handling--routing">2. <strong>triggers.js</strong> - Event Handling &amp; Routing</h3>
+<p><strong>Purpose</strong>: Central event routing system for form submissions and sheet edits.</p>
+<p><strong>Key Functions</strong>:</p>
+<ul>
+<li><code>onFormSubmitTrigger(e)</code>: Routes form submissions to appropriate handlers</li>
+<li><code>onEditTrigger(e)</code>: Handles sheet edit events for approvals</li>
+<li><code>createTriggers()</code>: Sets up all system triggers with auto-cleanup</li>
+<li><code>createAllTriggersMenu()</code>: Admin interface for trigger management</li>
+</ul>
+<p><strong>Business Logic</strong>:</p>
+<ul>
+<li><strong>Event Routing</strong>: Automatically routes events to correct business modules</li>
+<li><strong>Trigger Management</strong>: Prevents duplicate triggers, ensures clean setup</li>
+<li><strong>Error Handling</strong>: Robust error handling with detailed logging</li>
+</ul>
+<p><strong>User Journey Integration</strong>:</p>
+<ul>
+<li>Form submissions trigger business workflows</li>
+<li>Sheet edits trigger approval processes</li>
+<li>Background processes handle notifications</li>
+</ul>
+<hr>
+<h3 id="3-setupjs---system-setup--form-creation">3. <strong>setup.js</strong> - System Setup &amp; Form Creation</h3>
+<p><strong>Purpose</strong>: Complete system setup and form creation automation.</p>
+<p><strong>Key Functions</strong>:</p>
+<ul>
+<li><code>setupProject()</code>: Complete system initialization</li>
+<li><code>createFormWithConfig()</code>: Automated Google Form creation</li>
+<li><code>createAllForms()</code>: Bulk form creation for all modules</li>
+<li><code>setupRetailerPointRequestForm()</code>: Specific form setup functions</li>
+<li><code>setupDemandGenerationRequestForm()</code>: Demand generation form setup</li>
+</ul>
+<p><strong>Business Logic</strong>:</p>
+<ul>
+<li><strong>Automated Setup</strong>: Zero-configuration system deployment</li>
+<li><strong>Form Generation</strong>: Dynamic form creation from configuration</li>
+<li><strong>Validation Integration</strong>: Built-in validation and error checking</li>
+</ul>
+<p><strong>Admin User Stories</strong>:</p>
+<ul>
+<li>As an admin, I want to set up the entire system with one click</li>
+<li>As an admin, I want to create all forms automatically</li>
+<li>As an admin, I want to ensure all triggers are properly configured</li>
+</ul>
+<hr>
+<h3 id="4-sheetsjs---data-layer--sheet-operations">4. <strong>sheets.js</strong> - Data Layer &amp; Sheet Operations</h3>
+<p><strong>Purpose</strong>: Secure and reliable data operations for Google Sheets.</p>
+<p><strong>Key Functions</strong>:</p>
+<ul>
+<li><code>getOrCreateSheetSafe()</code>: Safe sheet creation with error handling</li>
+<li><code>appendRow()</code>: Secure data insertion with validation</li>
+<li><code>findRow()</code>: Data lookup and search operations</li>
+<li><code>updateRow()</code>: Safe data updates with concurrency control</li>
+</ul>
+<p><strong>Business Logic</strong>:</p>
+<ul>
+<li><strong>Data Integrity</strong>: Ensures data consistency and validation</li>
+<li><strong>Error Recovery</strong>: Handles sheet access failures gracefully</li>
+<li><strong>Performance Optimization</strong>: Efficient data operations</li>
+</ul>
+<p><strong>Technical Features</strong>:</p>
+<ul>
+<li>Atomic operations for data consistency</li>
+<li>Automatic sheet creation with proper schemas</li>
+<li>Comprehensive error handling and logging</li>
+</ul>
+<hr>
+<h3 id="5-notificationsjs---communication-system">5. <strong>notifications.js</strong> - Communication System</h3>
+<p><strong>Purpose</strong>: WhatsApp and communication management across all modules.</p>
+<p><strong>Key Functions</strong>:</p>
+<ul>
+<li><code>sendWhatsAppMessage()</code>: Core WhatsApp messaging functionality</li>
+<li><code>findEmployeeByEmail()</code>: Employee lookup for notifications</li>
+<li><code>findEmployeesByRole()</code>: Role-based employee filtering</li>
+<li><code>formatNotificationMessage()</code>: Message templating and formatting</li>
+</ul>
+<p><strong>Business Logic</strong>:</p>
+<ul>
+<li><strong>Role-based Routing</strong>: Messages sent to appropriate personnel</li>
+<li><strong>Template Management</strong>: Consistent message formatting</li>
+<li><strong>Fallback Mechanisms</strong>: Ensures critical notifications are delivered</li>
+</ul>
+<p><strong>Communication Patterns</strong>:</p>
+<ul>
+<li><strong>Instant Notifications</strong>: Real-time updates for urgent matters</li>
+<li><strong>Approval Workflows</strong>: Status change notifications</li>
+<li><strong>Error Alerts</strong>: System issue notifications</li>
+</ul>
+<hr>
+<h2 id="%F0%9F%94%84-business-logic--workflows">🔄 Business Logic &amp; Workflows</h2>
+<h3 id="1-engineer-registration-workflow-engineerjs">1. <strong>Engineer Registration Workflow</strong> (<code>engineer.js</code>)</h3>
+<p><strong>Process Flow</strong>:</p>
+<pre class="hljs"><code><div>Engineer Submits Form → Data Validation → CRM Storage → 
+Admin Notification → Manual Approval → WhatsApp Confirmation
+</div></code></pre>
+<p><strong>Key Functions</strong>:</p>
+<ul>
+<li><code>handleEngineerFormSubmit(e)</code>: Main form submission handler</li>
+<li><code>handleEngineerApprovalsEdit(e)</code>: Approval workflow management</li>
+</ul>
+<p><strong>Business Rules</strong>:</p>
+<ul>
+<li>Engineers must provide complete contact information</li>
+<li>NID documentation required for verification</li>
+<li>Territory-based assignment for management</li>
+<li>WhatsApp notifications for status updates</li>
+</ul>
+<p><strong>User Stories</strong>:</p>
+<ul>
+<li><strong>As an Engineer</strong>, I want to register in the system to receive project notifications</li>
+<li><strong>As a BDO</strong>, I want to approve engineer registrations to expand our network</li>
+<li><strong>As an Admin</strong>, I want to track all registered engineers by territory</li>
+</ul>
+<hr>
+<h3 id="2-potential-site-management-potential-sitejs">2. <strong>Potential Site Management</strong> (<code>potential-site.js</code>)</h3>
+<p><strong>Process Flow</strong>:</p>
+<pre class="hljs"><code><div>Site Registration → Location Validation → BDO Review → 
+Approval/Rejection → Project Creation → Customer Notification
+</div></code></pre>
+<p><strong>Key Functions</strong>:</p>
+<ul>
+<li><code>handlePotentialSiteFormSubmit(e)</code>: Site registration processing</li>
+<li><code>handlePotentialSiteApprovalsEdit(e)</code>: Approval workflow</li>
+<li><code>createProjectFromApprovedSite()</code>: Automatic project creation</li>
+<li><code>handlePotentialSiteUpdateFormSubmit(e)</code>: Site information updates</li>
+</ul>
+<p><strong>Business Rules</strong>:</p>
+<ul>
+<li>GPS coordinates required for location accuracy</li>
+<li>BDO approval required before project creation</li>
+<li>Automatic project ID generation (P.S-XXX format)</li>
+<li>Territory-based BDO assignment</li>
+</ul>
+<p><strong>User Stories</strong>:</p>
+<ul>
+<li><strong>As a Customer</strong>, I want to register my construction site to get services</li>
+<li><strong>As a BDO</strong>, I want to approve valid sites to expand our coverage area</li>
+<li><strong>As an Engineer</strong>, I want to receive notifications about approved sites in my territory</li>
+</ul>
+<hr>
+<h3 id="3-order-processing-system-orderjs">3. <strong>Order Processing System</strong> (<code>order.js</code>)</h3>
+<p><strong>Process Flow</strong>:</p>
+<pre class="hljs"><code><div>Order Submission → Site Validation → Territory Assignment → 
+Engineer/Partner Routing → Dispute Management → Fulfillment Tracking
+</div></code></pre>
+<p><strong>Key Functions</strong>:</p>
+<ul>
+<li><code>handleOrderFormSubmit(e)</code>: Main order processing</li>
+<li><code>sendOrderNotifications()</code>: Multi-party notification system</li>
+<li><code>sendDisputeNotifications()</code>: Dispute escalation management</li>
+<li><code>createDisputeNotificationMessage()</code>: Dispute communication templates</li>
+</ul>
+<p><strong>Business Rules</strong>:</p>
+<ul>
+<li>Orders must reference approved potential sites</li>
+<li>Automatic engineer/partner assignment based on requirements</li>
+<li>Dispute notifications for unmet requirements (Engineer/Partner)</li>
+<li>BDO/CRO escalation for dispute resolution</li>
+</ul>
+<p><strong>Advanced Features</strong>:</p>
+<ul>
+<li><strong>Smart Routing</strong>: Orders automatically assigned to appropriate personnel</li>
+<li><strong>Dispute Management</strong>: Automatic escalation when requirements not met</li>
+<li><strong>Status Tracking</strong>: Real-time order status updates</li>
+</ul>
+<p><strong>User Stories</strong>:</p>
+<ul>
+<li><strong>As a Customer</strong>, I want to place orders for construction materials easily</li>
+<li><strong>As an Engineer</strong>, I want to receive order notifications for my assigned sites</li>
+<li><strong>As a BDO</strong>, I want to handle disputes when engineers are not available</li>
+</ul>
+<hr>
+<h3 id="4-visit-management-system-visitjs">4. <strong>Visit Management System</strong> (<code>visit.js</code>)</h3>
+<p><strong>Process Flow</strong>:</p>
+<pre class="hljs"><code><div>Visit Scheduling → Customer Notification → Visit Execution → 
+Status Updates → Follow-up Actions → Progress Tracking
+</div></code></pre>
+<p><strong>Key Functions</strong>:</p>
+<ul>
+<li><code>handleVisitFormSubmit(e)</code>: Visit scheduling and processing</li>
+<li><code>sendVisitNotification()</code>: Customer and team notifications</li>
+<li><code>handleVisitUpdateFormSubmit(e)</code>: Visit status and progress updates</li>
+<li><code>sendVisitUpdateNotification()</code>: Status change communications</li>
+</ul>
+<p><strong>Business Rules</strong>:</p>
+<ul>
+<li>GPS coordinates captured for visit verification</li>
+<li>Photo documentation required for visit proof</li>
+<li>Automatic follow-up scheduling based on visit outcomes</li>
+<li>Customer satisfaction tracking</li>
+</ul>
+<p><strong>Visit Types</strong>:</p>
+<ul>
+<li><strong>Initial Site Survey</strong>: First customer contact and site assessment</li>
+<li><strong>Follow-up Visits</strong>: Progress monitoring and relationship building</li>
+<li><strong>Technical Consultation</strong>: Engineering and technical support</li>
+<li><strong>Problem Resolution</strong>: Issue investigation and solutions</li>
+</ul>
+<hr>
+<h3 id="5-retailer-point-system-retailer-pointjs">5. <strong>Retailer Point System</strong> (<code>retailer-point.js</code>)</h3>
+<p><strong>Process Flow</strong>:</p>
+<pre class="hljs"><code><div>BDO/CRO Request → ASM Notification → Territory Validation → 
+Approval/Rejection → Point Assignment → Performance Tracking
+</div></code></pre>
+<p><strong>Key Functions</strong>:</p>
+<ul>
+<li><code>handleRetailerPointFormSubmit(e)</code>: Point request processing</li>
+<li><code>sendRetailerPointNotifications()</code>: ASM notification system</li>
+<li><code>sendFallbackASMNotification()</code>: Fallback notification for unassigned territories</li>
+<li><code>handleRetailerPointRequestsEdit(e)</code>: Approval workflow management</li>
+</ul>
+<p><strong>Business Rules</strong>:</p>
+<ul>
+<li>Only BDO/CRO can request retailer points</li>
+<li>ASM approval required for point assignment</li>
+<li>Territory-based ASM routing with fallback mechanisms</li>
+<li>Performance tracking and reporting</li>
+</ul>
+<p><strong>User Stories</strong>:</p>
+<ul>
+<li><strong>As a BDO</strong>, I want to request retailer points to expand our retail network</li>
+<li><strong>As an ASM</strong>, I want to approve retailer point requests in my territory</li>
+<li><strong>As a CRO</strong>, I want to track retailer point performance across regions</li>
+</ul>
+<hr>
+<h3 id="6-demand-generation-system-demand-generationjs">6. <strong>Demand Generation System</strong> (<code>demand-generation.js</code>)</h3>
+<p><strong>Process Flow</strong>:</p>
+<pre class="hljs"><code><div>ASM Submission → BD Incharge Notification → Market Analysis → 
+Approval/Rejection → Implementation Guidance → Progress Monitoring
+</div></code></pre>
+<p><strong>Key Functions</strong>:</p>
+<ul>
+<li><code>handleDemandGenerationFormSubmit(e)</code>: Request processing</li>
+<li><code>sendDemandGenerationNotifications()</code>: BD Incharge notification</li>
+<li><code>findBDInchargeByTerritoryAndBusinessUnit()</code>: Smart routing logic</li>
+<li><code>approveDemandGenerationRequest()</code>: Approval workflow</li>
+</ul>
+<p><strong>Business Rules</strong>:</p>
+<ul>
+<li>ASM-only submission rights</li>
+<li>Territory and business unit-based BD Incharge assignment</li>
+<li>Market viability assessment required</li>
+<li>Implementation tracking and monitoring</li>
+</ul>
+<p><strong>Strategic Features</strong>:</p>
+<ul>
+<li><strong>Market Intelligence</strong>: Territory-based demand analysis</li>
+<li><strong>Resource Planning</strong>: Strategic resource allocation</li>
+<li><strong>Performance Metrics</strong>: Demand generation effectiveness tracking</li>
+</ul>
+<hr>
+<h2 id="%F0%9F%91%A5-user-journeys">👥 User Journeys</h2>
+<h3 id="1-customer-journey-from-inquiry-to-order-fulfillment">1. <strong>Customer Journey: From Inquiry to Order Fulfillment</strong></h3>
+<p><strong>Stage 1: Discovery &amp; Registration</strong></p>
+<pre class="hljs"><code><div>Customer Contact → Site Registration → Location Verification → 
+BDO Approval → Project Creation → Welcome Communication
+</div></code></pre>
+<p><strong>Touchpoints</strong>:</p>
+<ul>
+<li>Initial contact through referral or marketing</li>
+<li>Site registration via Google Form</li>
+<li>GPS location capture for accuracy</li>
+<li>BDO verification and approval</li>
+<li>Automatic project ID generation</li>
+<li>WhatsApp welcome message with project details</li>
+</ul>
+<p><strong>Stage 2: Service Engagement</strong></p>
+<pre class="hljs"><code><div>Visit Scheduling → Site Survey → Prescription Generation → 
+Technical Consultation → Order Placement → Fulfillment
+</div></code></pre>
+<p><strong>Touchpoints</strong>:</p>
+<ul>
+<li>Engineer visit scheduling</li>
+<li>On-site technical assessment</li>
+<li>Material prescription and recommendations</li>
+<li>Order submission through dedicated forms</li>
+<li>Engineer/partner assignment</li>
+<li>Order tracking and updates</li>
+</ul>
+<p><strong>Stage 3: Ongoing Relationship</strong></p>
+<pre class="hljs"><code><div>Follow-up Visits → Additional Orders → Feedback Collection → 
+Referral Generation → Long-term Partnership
+</div></code></pre>
+<hr>
+<h3 id="2-engineer-journey-registration-to-service-delivery">2. <strong>Engineer Journey: Registration to Service Delivery</strong></h3>
+<p><strong>Stage 1: Registration &amp; Onboarding</strong></p>
+<pre class="hljs"><code><div>Registration Application → Document Verification → Territory Assignment → 
+Approval → System Access → Training &amp; Orientation
+</div></code></pre>
+<p><strong>Stage 2: Daily Operations</strong></p>
+<pre class="hljs"><code><div>Order Notifications → Visit Scheduling → Site Assessment → 
+Service Delivery → Status Reporting → Customer Follow-up
+</div></code></pre>
+<p><strong>Stage 3: Performance &amp; Growth</strong></p>
+<pre class="hljs"><code><div>Performance Tracking → Feedback Integration → Territory Expansion → 
+Leadership Opportunities → Partner Development
+</div></code></pre>
+<hr>
+<h3 id="3-bdo-journey-territory-management">3. <strong>BDO Journey: Territory Management</strong></h3>
+<p><strong>Stage 1: Site Development</strong></p>
+<pre class="hljs"><code><div>Lead Generation → Site Evaluation → Approval Decisions → 
+Territory Expansion → Team Coordination
+</div></code></pre>
+<p><strong>Stage 2: Operations Management</strong></p>
+<pre class="hljs"><code><div>Engineer Coordination → Order Oversight → Dispute Resolution → 
+Performance Monitoring → Strategic Planning
+</div></code></pre>
+<p><strong>Stage 3: Business Growth</strong></p>
+<pre class="hljs"><code><div>Retailer Network Development → Demand Generation → 
+Market Analysis → Team Development → Goal Achievement
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%93%96-user-stories">📖 User Stories</h2>
+<h3 id="engineer-user-stories"><strong>Engineer User Stories</strong></h3>
+<p><strong>Registration &amp; Setup</strong></p>
+<ul>
+<li>As an <strong>Engineer</strong>, I want to register in the system easily so that I can receive project assignments</li>
+<li>As an <strong>Engineer</strong>, I want to upload my NID documents securely for verification</li>
+<li>As an <strong>Engineer</strong>, I want to specify my service areas so I receive relevant assignments</li>
+</ul>
+<p><strong>Daily Operations</strong></p>
+<ul>
+<li>As an <strong>Engineer</strong>, I want to receive WhatsApp notifications for new orders in my territory</li>
+<li>As an <strong>Engineer</strong>, I want to update my availability status to manage my workload</li>
+<li>As an <strong>Engineer</strong>, I want to submit visit reports with photos for documentation</li>
+</ul>
+<p><strong>Customer Service</strong></p>
+<ul>
+<li>As an <strong>Engineer</strong>, I want to access customer site information before visits</li>
+<li>As an <strong>Engineer</strong>, I want to create site prescriptions with material recommendations</li>
+<li>As an <strong>Engineer</strong>, I want to escalate complex technical issues to specialists</li>
+</ul>
+<h3 id="customer-user-stories"><strong>Customer User Stories</strong></h3>
+<p><strong>Site Registration</strong></p>
+<ul>
+<li>As a <strong>Customer</strong>, I want to register my construction site easily through a simple form</li>
+<li>As a <strong>Customer</strong>, I want to receive confirmation when my site is approved</li>
+<li>As a <strong>Customer</strong>, I want to track the status of my site registration</li>
+</ul>
+<p><strong>Service Requests</strong></p>
+<ul>
+<li>As a <strong>Customer</strong>, I want to request engineer visits for site consultation</li>
+<li>As a <strong>Customer</strong>, I want to receive advance notice of scheduled visits</li>
+<li>As a <strong>Customer</strong>, I want to place orders for construction materials easily</li>
+</ul>
+<p><strong>Order Management</strong></p>
+<ul>
+<li>As a <strong>Customer</strong>, I want to track my order status in real-time</li>
+<li>As a <strong>Customer</strong>, I want to receive notifications about order updates</li>
+<li>As a <strong>Customer</strong>, I want to report issues or request changes to my orders</li>
+</ul>
+<h3 id="bdo-business-development-officer-user-stories"><strong>BDO (Business Development Officer) User Stories</strong></h3>
+<p><strong>Territory Management</strong></p>
+<ul>
+<li>As a <strong>BDO</strong>, I want to review and approve potential site registrations in my territory</li>
+<li>As a <strong>BDO</strong>, I want to assign engineers to customer sites based on availability and expertise</li>
+<li>As a <strong>BDO</strong>, I want to monitor territory performance and growth metrics</li>
+</ul>
+<p><strong>Team Coordination</strong></p>
+<ul>
+<li>As a <strong>BDO</strong>, I want to manage engineer assignments and workload distribution</li>
+<li>As a <strong>BDO</strong>, I want to handle order disputes when engineers are unavailable</li>
+<li>As a <strong>BDO</strong>, I want to request retailer points to expand our network</li>
+</ul>
+<p><strong>Performance Monitoring</strong></p>
+<ul>
+<li>As a <strong>BDO</strong>, I want to track customer satisfaction and service quality</li>
+<li>As a <strong>BDO</strong>, I want to generate reports on territory performance</li>
+<li>As a <strong>BDO</strong>, I want to identify opportunities for business growth</li>
+</ul>
+<h3 id="asm-area-sales-manager-user-stories"><strong>ASM (Area Sales Manager) User Stories</strong></h3>
+<p><strong>Retailer Network Management</strong></p>
+<ul>
+<li>As an <strong>ASM</strong>, I want to approve retailer point requests from BDOs and CROs</li>
+<li>As an <strong>ASM</strong>, I want to monitor retailer performance in my area</li>
+<li>As an <strong>ASM</strong>, I want to coordinate with multiple BDOs for territory coverage</li>
+</ul>
+<p><strong>Demand Generation</strong></p>
+<ul>
+<li>As an <strong>ASM</strong>, I want to submit demand generation requests for new markets</li>
+<li>As an <strong>ASM</strong>, I want to receive feedback on my demand generation proposals</li>
+<li>As an <strong>ASM</strong>, I want to track the success of implemented demand generation strategies</li>
+</ul>
+<h3 id="bd-incharge-user-stories"><strong>BD Incharge User Stories</strong></h3>
+<p><strong>Strategic Planning</strong></p>
+<ul>
+<li>As a <strong>BD Incharge</strong>, I want to review demand generation requests from ASMs</li>
+<li>As a <strong>BD Incharge</strong>, I want to assess market viability and resource requirements</li>
+<li>As a <strong>BD Incharge</strong>, I want to approve or reject requests with detailed feedback</li>
+</ul>
+<p><strong>Business Development</strong></p>
+<ul>
+<li>As a <strong>BD Incharge</strong>, I want to guide ASMs on effective demand generation strategies</li>
+<li>As a <strong>BD Incharge</strong>, I want to coordinate with other BD Incharge for regional planning</li>
+<li>As a <strong>BD Incharge</strong>, I want to monitor the success of approved demand generation initiatives</li>
+</ul>
+<h3 id="admin-user-stories"><strong>Admin User Stories</strong></h3>
+<p><strong>System Management</strong></p>
+<ul>
+<li>As an <strong>Admin</strong>, I want to set up the entire system with minimal configuration</li>
+<li>As an <strong>Admin</strong>, I want to create all necessary forms and triggers automatically</li>
+<li>As an <strong>Admin</strong>, I want to monitor system health and performance</li>
+</ul>
+<p><strong>User Management</strong></p>
+<ul>
+<li>As an <strong>Admin</strong>, I want to manage user roles and permissions</li>
+<li>As an <strong>Admin</strong>, I want to track system usage and identify bottlenecks</li>
+<li>As an <strong>Admin</strong>, I want to backup and restore system data safely</li>
+</ul>
+<p><strong>Maintenance &amp; Support</strong></p>
+<ul>
+<li>As an <strong>Admin</strong>, I want to update system configurations without downtime</li>
+<li>As an <strong>Admin</strong>, I want to troubleshoot issues and provide user support</li>
+<li>As an <strong>Admin</strong>, I want to ensure data security and privacy compliance</li>
+</ul>
+<hr>
+<h2 id="%F0%9F%94%A7-api-reference">🔧 API Reference</h2>
+<h3 id="core-configuration-functions"><strong>Core Configuration Functions</strong></h3>
+<h4 id="config"><code>CONFIG</code></h4>
+<p><strong>Type</strong>: Object<br>
+<strong>Description</strong>: Central configuration object containing all system settings.</p>
+<pre class="hljs"><code><div>CONFIG = {
+  <span class="hljs-attr">SPREADSHEET_IDS</span>: { <span class="hljs-comment">/* All Google Sheets IDs */</span> },
+  <span class="hljs-attr">FORMS</span>: { <span class="hljs-comment">/* Form configurations */</span> },
+  <span class="hljs-attr">SHEET_NAMES</span>: { <span class="hljs-comment">/* Sheet naming conventions */</span> },
+  <span class="hljs-attr">SCHEMAS</span>: { <span class="hljs-comment">/* Data structures */</span> },
+  <span class="hljs-attr">TRIGGERS</span>: { <span class="hljs-comment">/* Event handlers */</span> }
+}
+</div></code></pre>
+<h3 id="trigger-management-functions"><strong>Trigger Management Functions</strong></h3>
+<h4 id="onformsubmittriggere"><code>onFormSubmitTrigger(e)</code></h4>
+<p><strong>Parameters</strong>:</p>
+<ul>
+<li><code>e</code> (Object): Google Apps Script form submission event object</li>
+</ul>
+<p><strong>Returns</strong>: void<br>
+<strong>Description</strong>: Central router for all form submissions. Automatically routes to appropriate business module handlers.</p>
+<p><strong>Example</strong>:</p>
+<pre class="hljs"><code><div><span class="hljs-comment">// Automatically called by Google Apps Script</span>
+<span class="hljs-comment">// Routes to handleOrderFormSubmit(), handleVisitFormSubmit(), etc.</span>
+</div></code></pre>
+<h4 id="createtriggers"><code>createTriggers()</code></h4>
+<p><strong>Returns</strong>: void<br>
+<strong>Description</strong>: Creates all system triggers with automatic cleanup of existing triggers.</p>
+<p><strong>Features</strong>:</p>
+<ul>
+<li>Deletes all existing triggers first</li>
+<li>Creates fresh triggers for all configured forms</li>
+<li>Skips unconfigured forms with warnings</li>
+<li>Comprehensive error handling and logging</li>
+</ul>
+<h3 id="data-layer-functions"><strong>Data Layer Functions</strong></h3>
+<h4 id="getorcreatesheetsafespreadsheetid-sheetname-schema"><code>getOrCreateSheetSafe(spreadsheetId, sheetName, schema)</code></h4>
+<p><strong>Parameters</strong>:</p>
+<ul>
+<li><code>spreadsheetId</code> (string): Google Sheets ID</li>
+<li><code>sheetName</code> (string): Name of the sheet</li>
+<li><code>schema</code> (Array): Column schema for sheet creation</li>
+</ul>
+<p><strong>Returns</strong>: Sheet object<br>
+<strong>Description</strong>: Safely creates or retrieves a sheet with proper error handling.</p>
+<h4 id="appendrowsheet-data"><code>appendRow(sheet, data)</code></h4>
+<p><strong>Parameters</strong>:</p>
+<ul>
+<li><code>sheet</code> (Sheet): Target sheet object</li>
+<li><code>data</code> (Array): Data array to append</li>
+</ul>
+<p><strong>Returns</strong>: Range object<br>
+<strong>Description</strong>: Safely appends data to sheet with validation.</p>
+<h3 id="notification-functions"><strong>Notification Functions</strong></h3>
+<h4 id="sendwhatsappmessagephonenumber-message"><code>sendWhatsAppMessage(phoneNumber, message)</code></h4>
+<p><strong>Parameters</strong>:</p>
+<ul>
+<li><code>phoneNumber</code> (string): Recipient's WhatsApp number</li>
+<li><code>message</code> (string): Message content</li>
+</ul>
+<p><strong>Returns</strong>: boolean<br>
+<strong>Description</strong>: Sends WhatsApp message with error handling and retry logic.</p>
+<h4 id="findemployeebyemailemail"><code>findEmployeeByEmail(email)</code></h4>
+<p><strong>Parameters</strong>:</p>
+<ul>
+<li><code>email</code> (string): Employee email address</li>
+</ul>
+<p><strong>Returns</strong>: Object|null<br>
+<strong>Description</strong>: Finds employee record by email with role and territory information.</p>
+<h3 id="business-module-functions"><strong>Business Module Functions</strong></h3>
+<h4 id="order-processing">Order Processing</h4>
+<h5 id="handleorderformsubmite"><code>handleOrderFormSubmit(e)</code></h5>
+<p><strong>Parameters</strong>:</p>
+<ul>
+<li><code>e</code> (Object): Form submission event</li>
+</ul>
+<p><strong>Returns</strong>: void<br>
+<strong>Description</strong>: Processes customer orders with automatic routing and notifications.</p>
+<p><strong>Workflow</strong>:</p>
+<ol>
+<li>Validates potential site ID</li>
+<li>Generates unique order ID</li>
+<li>Assigns engineer/partner based on requirements</li>
+<li>Sends notifications to all parties</li>
+<li>Creates dispute notifications if requirements not met</li>
+</ol>
+<h5 id="senddisputenotificationsorderdata-potentialsiteinfo-submitteremployee"><code>sendDisputeNotifications(orderData, potentialSiteInfo, submitterEmployee)</code></h5>
+<p><strong>Parameters</strong>:</p>
+<ul>
+<li><code>orderData</code> (Object): Order information</li>
+<li><code>potentialSiteInfo</code> (Object): Site details</li>
+<li><code>submitterEmployee</code> (Object): Customer information</li>
+</ul>
+<p><strong>Returns</strong>: void<br>
+<strong>Description</strong>: Handles dispute notifications when engineer/partner requirements are not met.</p>
+<h4 id="visit-management">Visit Management</h4>
+<h5 id="handlevisitformsubmite"><code>handleVisitFormSubmit(e)</code></h5>
+<p><strong>Parameters</strong>:</p>
+<ul>
+<li><code>e</code> (Object): Form submission event</li>
+</ul>
+<p><strong>Returns</strong>: void<br>
+<strong>Description</strong>: Processes visit scheduling with customer notifications.</p>
+<h5 id="sendvisitnotificationvisitdata"><code>sendVisitNotification(visitData)</code></h5>
+<p><strong>Parameters</strong>:</p>
+<ul>
+<li><code>visitData</code> (Object): Visit details and scheduling information</li>
+</ul>
+<p><strong>Returns</strong>: void<br>
+<strong>Description</strong>: Sends visit confirmations to customers and team members.</p>
+<h3 id="setup-functions"><strong>Setup Functions</strong></h3>
+<h4 id="setupproject"><code>setupProject()</code></h4>
+<p><strong>Returns</strong>: void<br>
+<strong>Description</strong>: Complete system initialization including sheets, forms, and triggers.</p>
+<h4 id="createformwithconfigformkey-formconfig-folder"><code>createFormWithConfig(formKey, formConfig, folder)</code></h4>
+<p><strong>Parameters</strong>:</p>
+<ul>
+<li><code>formKey</code> (string): Configuration key for the form</li>
+<li><code>formConfig</code> (Object): Form configuration object</li>
+<li><code>folder</code> (Folder): Google Drive folder for form storage</li>
+</ul>
+<p><strong>Returns</strong>: Object with form and spreadsheet references<br>
+<strong>Description</strong>: Creates Google Form based on configuration with automatic spreadsheet linking.</p>
+<hr>
+<h2 id="%F0%9F%9A%80-setup--deployment">🚀 Setup &amp; Deployment</h2>
+<h3 id="prerequisites"><strong>Prerequisites</strong></h3>
+<ul>
+<li>Google Account with Google Apps Script access</li>
+<li>Google Drive storage for forms and sheets</li>
+<li>WhatsApp Business API access (for notifications)</li>
+</ul>
+<h3 id="quick-setup"><strong>Quick Setup</strong></h3>
+<ol>
+<li>
+<p><strong>Create New Apps Script Project</strong></p>
+<pre class="hljs"><code><div><span class="hljs-comment">// In Google Apps Script Editor</span>
+<span class="hljs-comment">// Copy all .js files to the project</span>
+</div></code></pre>
+</li>
+<li>
+<p><strong>Run Initial Setup</strong></p>
+<pre class="hljs"><code><div>setupProject(); <span class="hljs-comment">// Creates all required sheets and configurations</span>
+</div></code></pre>
+</li>
+<li>
+<p><strong>Create Forms</strong></p>
+<pre class="hljs"><code><div>createAllForms(); <span class="hljs-comment">// Generates all Google Forms</span>
+</div></code></pre>
+</li>
+<li>
+<p><strong>Setup Triggers</strong></p>
+<pre class="hljs"><code><div>createAllTriggersMenu(); <span class="hljs-comment">// Creates all event triggers</span>
+</div></code></pre>
+</li>
+</ol>
+<h3 id="configuration-steps"><strong>Configuration Steps</strong></h3>
+<ol>
+<li>
+<p><strong>Update Spreadsheet IDs in config.js</strong></p>
+<pre class="hljs"><code><div>CONFIG.SPREADSHEET_IDS = {
+  <span class="hljs-attr">CRM</span>: <span class="hljs-string">'your-crm-spreadsheet-id'</span>,
+  <span class="hljs-comment">// Update other IDs as forms are created</span>
+};
+</div></code></pre>
+</li>
+<li>
+<p><strong>Configure WhatsApp Integration</strong></p>
+<pre class="hljs"><code><div><span class="hljs-comment">// Update notification.js with your WhatsApp API credentials</span>
+</div></code></pre>
+</li>
+<li>
+<p><strong>Test System</strong></p>
+<pre class="hljs"><code><div>runAllTests(); <span class="hljs-comment">// Comprehensive system testing</span>
+</div></code></pre>
+</li>
+</ol>
+<h3 id="production-deployment"><strong>Production Deployment</strong></h3>
+<ol>
+<li>
+<p><strong>Environment Configuration</strong></p>
+<ul>
+<li>Set up production Google Sheets</li>
+<li>Configure WhatsApp API endpoints</li>
+<li>Update configuration constants</li>
+</ul>
+</li>
+<li>
+<p><strong>Security Setup</strong></p>
+<ul>
+<li>Configure access permissions</li>
+<li>Set up data backup procedures</li>
+<li>Implement error monitoring</li>
+</ul>
+</li>
+<li>
+<p><strong>Performance Optimization</strong></p>
+<ul>
+<li>Enable trigger batching</li>
+<li>Configure caching where appropriate</li>
+<li>Set up monitoring dashboards</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="%F0%9F%A7%AA-testing">🧪 Testing</h2>
+<h3 id="test-coverage"><strong>Test Coverage</strong></h3>
+<p>The system includes comprehensive test suites for all major components:</p>
+<h4 id="core-system-tests"><strong>Core System Tests</strong></h4>
+<ul>
+<li><code>test-triggers.js</code>: Trigger creation and management</li>
+<li><code>test-visit.js</code>: Visit workflow and notifications</li>
+<li><code>test-order-dispute.js</code>: Order processing and dispute handling</li>
+<li><code>test-retailer-point-asm.js</code>: Retailer point management</li>
+<li><code>test-demand-generation.js</code>: Demand generation workflow</li>
+</ul>
+<h4 id="test-execution"><strong>Test Execution</strong></h4>
+<p><strong>Run All Tests</strong>:</p>
+<pre class="hljs"><code><div>runAllTests(); <span class="hljs-comment">// Comprehensive system testing</span>
+</div></code></pre>
+<p><strong>Individual Module Tests</strong>:</p>
+<pre class="hljs"><code><div>runAllVisitTests();           <span class="hljs-comment">// Visit system</span>
+runAllTriggerTests();         <span class="hljs-comment">// Trigger management</span>
+runAllDemandGenerationTests(); <span class="hljs-comment">// Demand generation</span>
+</div></code></pre>
+<p><strong>Quick Verification</strong>:</p>
+<pre class="hljs"><code><div>quickTriggerTest();           <span class="hljs-comment">// Rapid trigger verification</span>
+quickVisitTest();             <span class="hljs-comment">// Basic visit functionality</span>
+</div></code></pre>
+<h3 id="test-categories"><strong>Test Categories</strong></h3>
+<h4 id="unit-tests"><strong>Unit Tests</strong></h4>
+<ul>
+<li>Individual function testing</li>
+<li>Data validation testing</li>
+<li>Error handling verification</li>
+</ul>
+<h4 id="integration-tests"><strong>Integration Tests</strong></h4>
+<ul>
+<li>End-to-end workflow testing</li>
+<li>Cross-module communication</li>
+<li>External API integration</li>
+</ul>
+<h4 id="performance-tests"><strong>Performance Tests</strong></h4>
+<ul>
+<li>Load testing for high-volume operations</li>
+<li>Trigger performance verification</li>
+<li>Notification delivery testing</li>
+</ul>
+<hr>
+<h2 id="%F0%9F%94%A7-troubleshooting">🔧 Troubleshooting</h2>
+<h3 id="common-issues--solutions"><strong>Common Issues &amp; Solutions</strong></h3>
+<h4 id="trigger-issues"><strong>Trigger Issues</strong></h4>
+<p><strong>Problem</strong>: Duplicate triggers causing multiple executions<br>
+<strong>Solution</strong>: Run <code>createAllTriggersMenu()</code> to clean up and recreate all triggers</p>
+<p><strong>Problem</strong>: Triggers not firing for form submissions<br>
+<strong>Solution</strong>: Verify spreadsheet IDs in config.js match actual form response sheets</p>
+<h4 id="notification-issues"><strong>Notification Issues</strong></h4>
+<p><strong>Problem</strong>: WhatsApp messages not being sent<br>
+<strong>Solution</strong>:</p>
+<ol>
+<li>Check WhatsApp API credentials</li>
+<li>Verify phone number formats</li>
+<li>Check employee data for valid WhatsApp numbers</li>
+</ol>
+<h4 id="data-issues"><strong>Data Issues</strong></h4>
+<p><strong>Problem</strong>: Sheet not found errors<br>
+<strong>Solution</strong>: Run <code>initializeCRMSpreadsheet()</code> to create missing sheets</p>
+<p><strong>Problem</strong>: Data validation failures<br>
+<strong>Solution</strong>:</p>
+<ol>
+<li>Check schema definitions in config.js</li>
+<li>Verify data types match expected formats</li>
+<li>Review validation functions in validation.js</li>
+</ol>
+<h4 id="performance-issues"><strong>Performance Issues</strong></h4>
+<p><strong>Problem</strong>: Slow form processing<br>
+<strong>Solution</strong>:</p>
+<ol>
+<li>Optimize sheet operations to reduce API calls</li>
+<li>Implement batching for bulk operations</li>
+<li>Add caching for frequently accessed data</li>
+</ol>
+<h3 id="debug-tools"><strong>Debug Tools</strong></h3>
+<h4 id="logging--monitoring"><strong>Logging &amp; Monitoring</strong></h4>
+<pre class="hljs"><code><div><span class="hljs-comment">// Enable detailed logging</span>
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Debug info:'</span>, debugData);
+Logger.log(<span class="hljs-string">'Persistent log entry'</span>);
+</div></code></pre>
+<h4 id="test-functions"><strong>Test Functions</strong></h4>
+<pre class="hljs"><code><div><span class="hljs-comment">// Quick system health check</span>
+quickSystemTest();
+
+<span class="hljs-comment">// Detailed component testing</span>
+runSpecificModuleTest(<span class="hljs-string">'order'</span>);
+</div></code></pre>
+<h4 id="manual-verification"><strong>Manual Verification</strong></h4>
+<pre class="hljs"><code><div><span class="hljs-comment">// Check trigger status</span>
+viewCurrentTriggers();
+
+<span class="hljs-comment">// Verify sheet structures</span>
+validateAllSheets();
+
+<span class="hljs-comment">// Test notification delivery</span>
+testNotificationSystem();
+</div></code></pre>
+<h3 id="support-resources"><strong>Support Resources</strong></h3>
+<h4 id="documentation"><strong>Documentation</strong></h4>
+<ul>
+<li>System architecture diagrams</li>
+<li>API documentation</li>
+<li>User guides and tutorials</li>
+</ul>
+<h4 id="monitoring"><strong>Monitoring</strong></h4>
+<ul>
+<li>Error tracking and alerts</li>
+<li>Performance metrics</li>
+<li>Usage analytics</li>
+</ul>
+<h4 id="maintenance"><strong>Maintenance</strong></h4>
+<ul>
+<li>Regular backup procedures</li>
+<li>System health checks</li>
+<li>Update and upgrade procedures</li>
+</ul>
+<hr>
+<h2 id="%F0%9F%8E%AF-conclusion">🎯 Conclusion</h2>
+<p>The <strong>Anwar Sales Ecosystem</strong> represents a comprehensive, scalable solution for construction material supply chain management. Its modular architecture, robust error handling, and automated workflows make it an ideal platform for businesses looking to streamline their operations and improve customer satisfaction.</p>
+<h3 id="key-strengths"><strong>Key Strengths</strong></h3>
+<ul>
+<li>✅ <strong>Comprehensive Coverage</strong>: Handles entire customer lifecycle</li>
+<li>✅ <strong>Automated Workflows</strong>: Reduces manual intervention and errors</li>
+<li>✅ <strong>Real-time Communication</strong>: WhatsApp integration for instant updates</li>
+<li>✅ <strong>Scalable Architecture</strong>: Modular design supports business growth</li>
+<li>✅ <strong>Robust Testing</strong>: Comprehensive test coverage ensures reliability</li>
+</ul>
+<h3 id="future-enhancements"><strong>Future Enhancements</strong></h3>
+<ul>
+<li>📱 Mobile app integration</li>
+<li>📊 Advanced analytics and reporting</li>
+<li>🤖 AI-powered recommendations</li>
+<li>🌐 Multi-language support</li>
+<li>📈 Performance optimization</li>
+</ul>
+<hr>
+<p><em>This documentation covers the complete Anwar Sales Ecosystem. For specific implementation details or support, refer to the individual module documentation or contact the development team.</em></p>
+
+</body>
+
+</html>
