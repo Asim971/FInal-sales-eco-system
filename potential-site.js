@@ -7,7 +7,7 @@
  * @param {Object} e The event object.
  */
 function handlePotentialSiteFormSubmit(e) {
-  const crmSheet = getSheet(CONFIG.SPREADSHEET_IDS.CRM, CONFIG.SHEET_NAMES.POTENTIAL_SITE_APPROVALS);
+  const crmSheet = getSheet(CONFIG.SPREADSHEET_IDS.POTENTIAL_SITE, 'Approvals');
 
   const response = e.values;
   const timestamp = response[0];
@@ -51,95 +51,29 @@ function handlePotentialSiteFormSubmit(e) {
                potentialSiteId, status, engineerId, engineerName, partnerId, partnerName, assignmentDate, notes];
   appendRow(crmSheet, row);
 
-  // Look up submitter in employee system to get territory and contact info
-  const submitterEmployee = findEmployeeByEmail(submitterEmail);
-  
-  console.log('Employee lookup debug:');
-  console.log('Submitter employee found:', submitterEmployee ? 'Yes' : 'No');
-  if (submitterEmployee) {
-    console.log('Employee name:', submitterEmployee.name);
-    console.log('Employee role:', submitterEmployee.role);
-    console.log('Employee territory:', submitterEmployee.territory);
-    console.log('Employee WhatsApp:', submitterEmployee.whatsappNumber);
-  }
-  
-  // Look up IHB data if IHB ID is provided
-  let ihbData = null;
-  if (ihbId) {
-    ihbData = findIHBById(ihbId);
-    console.log('IHB lookup by ID:', ihbData ? 'Found' : 'Not found');
-  }
-
-  // If no IHB ID but submitter is found, try to look up IHB by submitter email
-  if (!ihbData && submitterEmployee) {
-    ihbData = findIHBByEmail(submitterEmail);
-    console.log('IHB lookup by email:', ihbData ? 'Found' : 'Not found');
-  }
-
-  // Collect notification recipients
-  let notificationRecipients = [];
-  
-  console.log('Building notification recipients...');
-  
-  // Add submitter if they have WhatsApp
-  if (submitterEmployee && submitterEmployee.whatsappNumber) {
-    notificationRecipients.push({
-      name: submitterEmployee.name,
-      role: submitterEmployee.role,
-      whatsappNumber: submitterEmployee.whatsappNumber
-    });
-    console.log('Added submitter to recipients:', submitterEmployee.name);
-  } else {
-    console.log('Submitter not added:', submitterEmployee ? 'No WhatsApp number' : 'Employee not found');
-  }
-
-  // Add all team members in the same territory if submitter has territory
-  if (submitterEmployee && submitterEmployee.territory) {
-    console.log('Looking up territory team members for territory:', submitterEmployee.territory);
-    const territoryTeamMembers = findEmployeesByTerritory(submitterEmployee.territory);
-    console.log('Territory team members found:', territoryTeamMembers.length);
-    
-    territoryTeamMembers.forEach(member => {
-      if (member.whatsappNumber && member.email !== submitterEmail) {
-        notificationRecipients.push({
-          name: member.name,
-          role: member.role,
-          whatsappNumber: member.whatsappNumber
-        });
-        console.log('Added territory member to recipients:', member.name, member.role);
-      } else {
-        console.log('Territory member not added:', member.name, member.whatsappNumber ? 'Same email as submitter' : 'No WhatsApp');
-      }
-    });
-  } else {
-    console.log('No territory team lookup:', submitterEmployee ? 'No territory assigned' : 'Employee not found');
-  }
-
-  // Create notification message
-  const message = `New Potential Site Registration Submission
-Potential Site ID: ${potentialSiteId}
-Site Name: ${siteName}
-Address: ${address}
-${latitude ? `Latitude: ${latitude}` : ''}
-${longitude ? `Longitude: ${longitude}` : ''}
-${ihbId ? `IHB ID: ${ihbId}` : ''}
-${ihbName ? `IHB Name: ${ihbName}` : ''}
-${ihbData ? `IHB Contact: ${ihbData.mobileNumber}` : ''}
-Submitter: ${submitterEmployee ? submitterEmployee.name : submitterEmail}
-${submitterEmployee ? `Territory: ${submitterEmployee.territory}` : ''}
-Submission Date: ${new Date().toLocaleString()}`;
-
-  // Send notifications to all recipients
-  notificationRecipients.forEach(recipient => {
-    try {
-      sendWhatsAppMessage(recipient.whatsappNumber, message);
-      console.log(`Notification sent to ${recipient.name} (${recipient.role}): ${recipient.whatsappNumber}`);
-    } catch (error) {
-      console.error(`Failed to send notification to ${recipient.name}:`, error);
+  // Send form submission notification using centralized system
+  sendFormNotification('POTENTIAL_SITE_REGISTRATION', {
+    timestamp: timestamp,
+    submitterEmail: submitterEmail,
+    formData: {
+      siteName: siteName,
+      address: address,
+      latitude: latitude,
+      longitude: longitude,
+      ihbId: ihbId,
+      ihbName: ihbName,
+      potentialSiteId: potentialSiteId
     }
   });
 
-  console.log(`Potential Site submission processed. Notifications sent to ${notificationRecipients.length} recipients.`);
+  // Send submitter confirmation
+  sendSubmitterConfirmation(submitterEmail, 'POTENTIAL_SITE_REGISTRATION', {
+    siteName: siteName,
+    potentialSiteId: potentialSiteId,
+    submissionTime: new Date().toLocaleString()
+  });
+
+  console.log(`Potential Site submission processed. ID: ${potentialSiteId}`);
 }
 
 /**
@@ -147,7 +81,7 @@ Submission Date: ${new Date().toLocaleString()}`;
  * @returns {string} The generated Potential Site ID.
  */
 function generatePotentialSiteId() {
-  const sheet = getSheet(CONFIG.SPREADSHEET_IDS.CRM, CONFIG.SHEET_NAMES.POTENTIAL_SITE_APPROVALS);
+  const sheet = getSheet(CONFIG.SPREADSHEET_IDS.POTENTIAL_SITE, 'Approvals');
   const data = getSheetData(sheet);
   
   // Find the highest existing P.S ID number
@@ -201,70 +135,27 @@ function handlePotentialSiteApprovalsEdit(e) {
   const assignmentDate = rowData[14];
   const notes = rowData[15];
 
-  // Look up submitter in employee system to get territory and contact info
-  const submitterEmployee = findEmployeeByEmail(submitterEmail);
+  // Send form notification using centralized system
+  const notificationType = status === 'Approved' ? 'POTENTIAL_SITE_APPROVAL' : 'POTENTIAL_SITE_REJECTION';
   
-  // Look up IHB data if IHB ID is provided
-  let ihbData = null;
-  if (ihbId) {
-    ihbData = findIHBById(ihbId);
-  }
-
-  // If no IHB ID but submitter is found, try to look up IHB by submitter email
-  if (!ihbData && submitterEmployee) {
-    ihbData = findIHBByEmail(submitterEmail);
-  }
-
-  // Collect notification recipients
-  let notificationRecipients = [];
-  
-  // Add submitter if they have WhatsApp
-  if (submitterEmployee && submitterEmployee.whatsappNumber) {
-    notificationRecipients.push({
-      name: submitterEmployee.name,
-      role: submitterEmployee.role,
-      whatsappNumber: submitterEmployee.whatsappNumber
-    });
-  }
-
-  // Add all team members in the same territory if submitter has territory
-  if (submitterEmployee && submitterEmployee.territory) {
-    const territoryTeamMembers = findEmployeesByTerritory(submitterEmployee.territory);
-    
-    territoryTeamMembers.forEach(member => {
-      if (member.whatsappNumber && member.email !== submitterEmail) {
-        notificationRecipients.push({
-          name: member.name,
-          role: member.role,
-          whatsappNumber: member.whatsappNumber
-        });
-      }
-    });
-  }
-
-  const message = `Potential Site Registration Update
-Potential Site ID: ${potentialSiteId}
-Site Name: ${siteName}
-Address: ${address}
-${latitude ? `Latitude: ${latitude}` : ''}
-${longitude ? `Longitude: ${longitude}` : ''}
-${ihbId ? `IHB ID: ${ihbId}` : ''}
-${ihbName ? `IHB Name: ${ihbName}` : ''}
-${ihbData ? `IHB Contact: ${ihbData.mobileNumber}` : ''}
-${engineerId ? `Engineer: ${engineerName} (${engineerId})` : ''}
-${partnerId ? `Partner: ${partnerName} (${partnerId})` : ''}
-${assignmentDate ? `Assignment Date: ${assignmentDate}` : ''}
-Status: ${status}
-Update Date: ${new Date().toLocaleString()}
-${notes ? `Notes: ${notes}` : ''}`;
-
-  // Send notifications to all recipients
-  notificationRecipients.forEach(recipient => {
-    try {
-      sendWhatsAppMessage(recipient.whatsappNumber, message);
-      console.log(`Status update notification sent to ${recipient.name} (${recipient.role}): ${recipient.whatsappNumber}`);
-    } catch (error) {
-      console.error(`Failed to send status update notification to ${recipient.name}:`, error);
+  sendFormNotification(notificationType, {
+    timestamp: new Date(),
+    submitterEmail: submitterEmail,
+    formData: {
+      siteName: siteName,
+      address: address,
+      latitude: latitude,
+      longitude: longitude,
+      ihbId: ihbId,
+      ihbName: ihbName,
+      potentialSiteId: potentialSiteId,
+      status: status,
+      engineerId: engineerId,
+      engineerName: engineerName,
+      partnerId: partnerId,
+      partnerName: partnerName,
+      assignmentDate: assignmentDate,
+      notes: notes
     }
   });
 
@@ -273,7 +164,7 @@ ${notes ? `Notes: ${notes}` : ''}`;
     createProjectFromApprovedSite(potentialSiteId, siteName, address, latitude, longitude, submitterEmail);
   }
 
-  console.log(`Potential Site status update processed. Notifications sent to ${notificationRecipients.length} recipients.`);
+  console.log(`Potential Site status update processed: ${status}`);
 }
 
 /**
@@ -384,6 +275,7 @@ function findIHBByEmail(email) {
 
 /**
  * Finds all employees in a specific territory.
+ * Enhanced to work with both legacy and new territory fields.
  * @param {string} territory The territory to search for.
  * @returns {Array} Array of employee objects in the territory.
  */
@@ -393,26 +285,42 @@ function findEmployeesByTerritory(territory) {
   const employees = [];
 
   for (let i = 1; i < data.length; i++) {
-    if (data[i][11] === territory && data[i][8] === 'Active') { // Territory column and Status column
+    const row = data[i];
+    const status = row[8]; // Status column
+    const legacyTerritory = row[11]; // Legacy territory column
+    const newTerritory = row[16]; // New territory column (if exists)
+    
+    // Check both legacy and new territory fields for backward compatibility
+    if (status === 'Active' && (legacyTerritory === territory || newTerritory === territory)) {
       employees.push({
-        id: data[i][0],
-        name: data[i][1],
-        role: data[i][2],
-        email: data[i][3],
-        contactNumber: data[i][4],
-        whatsappNumber: data[i][5],
-        bkashNumber: data[i][6],
-        nidNo: data[i][7],
-        status: data[i][8],
-        hireDate: data[i][9],
-        company: data[i][10],
-        territory: data[i][11],
-        area: data[i][12],
-        legacyId: data[i][13],
-        notes: data[i][14]
+        id: row[0],
+        name: row[1],
+        role: row[2],
+        email: row[3],
+        contactNumber: row[4],
+        whatsappNumber: row[5],
+        bkashNumber: row[6],
+        nidNo: row[7],
+        status: row[8],
+        hireDate: row[9],
+        company: row[10],
+        territory: row[11], // Legacy territory field
+        area: row[12], // Legacy area field
+        zone: row[13] || '', // New zone field (optional)
+        district: row[14] || '', // New district field (optional)
+        newArea: row[15] || '', // New area field (optional)
+        newTerritory: row[16] || '', // New territory field (optional)
+        bazaar: row[17] || '', // Bazaar field (optional)
+        upazilla: row[18] || '', // Upazilla field (optional)
+        bdTerritory: row[19] || '', // BD Territory field (optional)
+        croTerritory: row[20] || '', // CRO Territory field (optional)
+        businessUnit: row[21] || '', // Business Unit field (optional)
+        legacyId: row[22] || row[13] || '', // Legacy ID field (maintain backward compatibility)
+        notes: row[23] || row[14] || '' // Notes field (maintain backward compatibility)
       });
     }
   }
+
   return employees;
 }
 
@@ -451,7 +359,7 @@ function handlePotentialSiteUpdateFormSubmit(e) {
     }
     
     // Find the potential site record to update
-    const crmSheet = getSheet(CONFIG.SPREADSHEET_IDS.CRM, CONFIG.SHEET_NAMES.POTENTIAL_SITE_APPROVALS);
+    const crmSheet = getSheet(CONFIG.SPREADSHEET_IDS.POTENTIAL_SITE, 'Approvals');
     const data = crmSheet.getDataRange().getValues();
     let siteRowIndex = -1;
     

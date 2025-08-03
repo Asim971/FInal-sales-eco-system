@@ -1,5 +1,6 @@
 /**
- * @fileoverview This file contains the trigger functions for the Anwar Sales Ecosystem.
+ * @fileo  switch (sheetName) {
+    case CONFIG.SHEET_NAMES.RETAILER_APPROVALS:This file contains the trigger functions for the Anwar Sales Ecosystem.
  */
 
 /**
@@ -12,15 +13,6 @@ function onEditTrigger(e) {
   const sheetName = sheet.getName();
 
   switch (sheetName) {
-    case CONFIG.SHEET_NAMES.CRM_APPROVALS:
-      handleCrmApprovalsEdit(e);
-      break;
-    case CONFIG.SHEET_NAMES.ENGINEER_APPROVALS:
-      handleEngineerApprovalsEdit(e);
-      break;
-    case CONFIG.SHEET_NAMES.POTENTIAL_SITE_APPROVALS:
-      handlePotentialSiteApprovalsEdit(e);
-      break;
     case CONFIG.SHEET_NAMES.RETAILER_APPROVALS:
       handleRetailerApprovalsEdit(e);
       break;

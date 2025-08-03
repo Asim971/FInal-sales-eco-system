@@ -108,6 +108,22 @@ function handleSitePrescriptionFormSubmit(e) {
     
     sheet.appendRow(rowData);
     
+    // NEW: Create personal user sheet and add data - Per-Submitter Sheets Feature
+    try {
+      if (CONFIG.USER_SHEETS_CONFIG && CONFIG.USER_SHEETS_CONFIG.ENABLED && submitterEmail) {
+        console.log(`📝 Creating personal site prescription sheet for: ${submitterEmail}`);
+        
+        const userSheet = getOrCreateUserSheet(submitterEmail, 'SitePrescription');
+        if (userSheet) {
+          appendRowToUserSheet(userSheet.id, 'SitePrescription', rowData);
+          console.log(`✅ Added site prescription to personal sheet: ${userSheet.name}`);
+        }
+      }
+    } catch (userSheetError) {
+      console.error('⚠️ Error creating user site prescription sheet (non-critical):', userSheetError);
+      // Don't fail the main process if user sheet creation fails
+    }
+    
     // Send notifications
     sendSitePrescriptionNotifications(prescriptionData, siteInfo);
     
