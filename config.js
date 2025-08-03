@@ -22,7 +22,14 @@ const CONFIG = {
     VISIT_UPDATE: '17pRoiZvFq1YtZhR5hmK0qeXAD16AsAu_-vo_XuoiGCU', // Replace with actual ID during setup
     IHB_REGISTRATION: '1Mb1-_Brijl0WQW1LZI_WZFc3ftbYLJt948oMlfLGKv8', // Replace with actual ID during setup
     RETAILER_POINT_REQUEST: '1lRhAwpFWF4dVx9dAvSsBo4SLa-HQVU-GSmY968Wl_5E', // Replace with actual ID during setup
-    DEMAND_GENERATION_REQUEST: '1DGR_SPREADSHEET_ID_TO_BE_REPLACED' // Replace with actual ID during setup
+    DEMAND_GENERATION_REQUEST: 'DUkpq0w1zlEECjKMayJfwcDI__YGXnF9o8Z8JLUE3vI' // Replace with actual ID during setup
+  },
+  
+  // User Sheets Configuration - Added for Per-Submitter Sheets Feature
+  USER_SHEETS_CONFIG: {
+    FOLDER_ID: '1iiviQqjow1e8ZjzARFszvx408N8bsJAC', // Replace with actual folder ID during setup
+    ENABLED: true, // Toggle to enable/disable user sheet creation
+    CACHE_TIMEOUT: 600 // Cache timeout for conversation state (10 minutes)
   },
   FORMS: {
     PARTNER_REGISTRATION: {
@@ -257,6 +264,11 @@ const CONFIG = {
     ],
     DEMAND_GENERATION_REQUESTS: [
       'Timestamp', 'Request ID', 'Email Address', 'Territory', 'Bazaar', 'Area', 'Reason', 'Business Unit', 'Status', 'BD Incharge Notes', 'Approval Date', 'Notes'
+    ],
+    
+    // User Sheet Metadata Schema - Added for Per-Submitter Sheets Feature
+    USER_SHEET_MAP: [
+      'Email', 'Sheet Type', 'Sheet Name', 'Sheet ID', 'Created Date', 'Last Updated', 'Status'
     ]
   },
   SHEET_NAMES: {
@@ -276,14 +288,19 @@ const CONFIG = {
     VISITS: 'Visits',
     IHB_APPROVALS: 'IHB Approvals',
     RETAILER_POINT_REQUESTS: 'Retailer Point Requests',
-    DEMAND_GENERATION_REQUESTS: 'Demand Generation Requests'
+    DEMAND_GENERATION_REQUESTS: 'Demand Generation Requests',
+    
+    // User Sheet Registry - Added for Per-Submitter Sheets Feature
+    USER_SHEET_MAP: 'User Sheet Map'
   },
   API_KEYS: {
     MAYTAPI: '183bcf62-cf0e-4e1d-9f22-59b0a730cd0b' // Replace with actual key
   },
   MAYTAPI_CONFIG: {
-    API_URL: 'https://api.maytapi.com/api/55968f1b-01dc-4f02-baca-af83b92ca455/90126/sendMessage',
-    API_KEY: '183bcf62-cf0e-4e1d-9f22-59b0a730cd0b'
+    PRODUCT_ID: '55968f1b-01dc-4f02-baca-af83b92ca455',
+    PHONE_ID: '90126',
+    API_KEY: '183bcf62-cf0e-4e1d-9f22-59b0a730cd0b',
+    API_URL: 'https://api.maytapi.com/api/55968f1b-01dc-4f02-baca-af83b92ca455/90126/sendMessage'
   },
   TRIGGERS: {
     ON_EDIT: 'onEditTrigger',

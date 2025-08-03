@@ -371,9 +371,9 @@ If deployed as a Web App, the Apps Script project can expose a `doPost(e)` or `d
 
 -   **Endpoint Example**:
     ```
-    https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec
+    https://script.google.com/macros/s/AKfycbxObIdZ5PfAK8mXDBQTh6dlSQ5GWNsPgUUOXPPwUlGacNkb8mNGTdPO765SoTPD_227Hw/exec
     ```
-    (Replace `YOUR_DEPLOYMENT_ID` with the actual deployment ID obtained after deploying the script as a Web App.)
+    (Using the configured script ID for the Anwar Sales Ecosystem deployment.)
 
 -   **Authentication**:
     -   Typically handled by Google's OAuth for authenticated users.
@@ -487,7 +487,7 @@ While Google Apps Script runs in the cloud, local development can be facilitated
 3.  **Clone the Apps Script Project (if starting fresh)**:
 
     ```bash
-    clasp clone <SCRIPT_ID>
+    clasp clone 1PNlKdBu9UYI-Dxsr2TTwJ-BOEC4JGc8C-i4NM1s7vxBl5pMO9_Rq14Tf
     ```
 
 4.  **Push/Pull Code**:

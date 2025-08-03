@@ -282,3 +282,103 @@ function findEmployeesByRole(roles) {
   }
   return matchingEmployees;
 }
+
+/**
+ * Finds an employee by their WhatsApp number.
+ * This function is essential for the Per-Submitter Sheets WhatsApp integration.
+ * @param {string} whatsappNumber The WhatsApp number to search for.
+ * @returns {Object|null} The employee data or null if not found.
+ */
+function findEmployeeByWhatsApp(whatsappNumber) {
+  try {
+    console.log(`🔍 Looking up employee by WhatsApp number: ${whatsappNumber}`);
+    
+    const employeesSheet = getSheet(CONFIG.SPREADSHEET_IDS.CRM, CONFIG.SHEET_NAMES.EMPLOYEES);
+    const data = getSheetData(employeesSheet);
+    
+    // Clean and normalize the phone number for comparison
+    const cleanNumber = normalizePhoneNumber(whatsappNumber);
+    
+    for (let i = 1; i < data.length; i++) {
+      const employeeWhatsApp = data[i][5]; // WhatsApp number is in column F (index 5)
+      const employeeContact = data[i][4];  // Contact number is in column E (index 4)
+      
+      // Check both WhatsApp and contact number fields
+      if (employeeWhatsApp && normalizePhoneNumber(employeeWhatsApp) === cleanNumber) {
+        console.log(`✅ Found employee by WhatsApp: ${data[i][1]} (${data[i][3]})`);
+        return {
+          id: data[i][0],
+          name: data[i][1],
+          role: data[i][2],
+          email: data[i][3],
+          contactNumber: data[i][4],
+          whatsappNumber: data[i][5],
+          bkashNumber: data[i][6],
+          nidNo: data[i][7],
+          status: data[i][8],
+          hireDate: data[i][9],
+          company: data[i][10],
+          territory: data[i][11],
+          area: data[i][12],
+          legacyId: data[i][13],
+          notes: data[i][14]
+        };
+      }
+      
+      // Also check contact number as fallback
+      if (employeeContact && normalizePhoneNumber(employeeContact) === cleanNumber) {
+        console.log(`✅ Found employee by contact number: ${data[i][1]} (${data[i][3]})`);
+        return {
+          id: data[i][0],
+          name: data[i][1],
+          role: data[i][2],
+          email: data[i][3],
+          contactNumber: data[i][4],
+          whatsappNumber: data[i][5],
+          bkashNumber: data[i][6],
+          nidNo: data[i][7],
+          status: data[i][8],
+          hireDate: data[i][9],
+          company: data[i][10],
+          territory: data[i][11],
+          area: data[i][12],
+          legacyId: data[i][13],
+          notes: data[i][14]
+        };
+      }
+    }
+    
+    console.log(`❌ No employee found for WhatsApp number: ${whatsappNumber}`);
+    return null;
+    
+  } catch (error) {
+    console.error('Error finding employee by WhatsApp:', error);
+    return null;
+  }
+}
+
+/**
+ * Normalizes phone numbers for consistent comparison.
+ * Removes spaces, dashes, and standardizes country codes.
+ * 
+ * @param {string} phoneNumber - Raw phone number
+ * @returns {string} Normalized phone number
+ */
+function normalizePhoneNumber(phoneNumber) {
+  if (!phoneNumber) return '';
+  
+  let normalized = phoneNumber.toString()
+    .replace(/[\s\-\(\)]/g, '') // Remove spaces, dashes, parentheses
+    .replace(/^\+/, ''); // Remove leading +
+  
+  // Handle Bangladesh country code variations
+  if (normalized.startsWith('88') && normalized.length > 11) {
+    // Already has country code
+    return normalized;
+  } else if (normalized.startsWith('01') && normalized.length === 11) {
+    // Local Bangladesh number, add country code
+    return '88' + normalized;
+  }
+  
+  return normalized;
+}

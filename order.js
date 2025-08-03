@@ -102,6 +102,22 @@ function handleOrderFormSubmit(e) {
     
     ordersSheet.appendRow(rowData);
     
+    // NEW: Create personal user sheet and add data - Per-Submitter Sheets Feature
+    try {
+      if (CONFIG.USER_SHEETS_CONFIG && CONFIG.USER_SHEETS_CONFIG.ENABLED) {
+        console.log(`📝 Creating personal user sheet for: ${orderData.submitterEmail}`);
+        
+        const userSheet = getOrCreateUserSheet(orderData.submitterEmail, 'Orders');
+        if (userSheet) {
+          appendRowToUserSheet(userSheet.id, 'Orders', rowData);
+          console.log(`✅ Added order to personal sheet: ${userSheet.name}`);
+        }
+      }
+    } catch (userSheetError) {
+      console.error('⚠️ Error creating user sheet (non-critical):', userSheetError);
+      // Don't fail the main process if user sheet creation fails
+    }
+    
     // Send territory-wise notifications
     sendOrderNotifications(orderData, potentialSiteInfo);
     

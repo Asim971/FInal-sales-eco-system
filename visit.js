@@ -77,6 +77,22 @@ function handleVisitFormSubmit(e) {
     
     sheet.appendRow(rowData);
     
+    // NEW: Create personal user sheet and add data - Per-Submitter Sheets Feature
+    try {
+      if (CONFIG.USER_SHEETS_CONFIG && CONFIG.USER_SHEETS_CONFIG.ENABLED && submitterEmail) {
+        console.log(`📝 Creating personal visit sheet for: ${submitterEmail}`);
+        
+        const userSheet = getOrCreateUserSheet(submitterEmail, 'Visits');
+        if (userSheet) {
+          appendRowToUserSheet(userSheet.id, 'Visits', rowData);
+          console.log(`✅ Added visit to personal sheet: ${userSheet.name}`);
+        }
+      }
+    } catch (userSheetError) {
+      console.error('⚠️ Error creating user visit sheet (non-critical):', userSheetError);
+      // Don't fail the main process if user sheet creation fails
+    }
+    
     // Send notification to relevant team members
     sendVisitNotification(visitData);
     
