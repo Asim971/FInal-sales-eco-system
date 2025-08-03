@@ -7,27 +7,48 @@
  * @param {Object} e The event object.
  */
 function handlePartnerUpdateFormSubmit(e) {
-  const response = e.values;
-  const timestamp = response[0];
-  
-  // Get submitter email from multiple sources
-  let submitterEmail = response[1];
-  if (!submitterEmail) {
-    submitterEmail = e.namedValues['Email Address'] ? e.namedValues['Email Address'][0] : null;
-  }
-  if (!submitterEmail && e.response) {
-    submitterEmail = e.response.getRespondentEmail();
-  }
-  
-  const projectId = response[2]; // This should be a Potential Site ID (e.g., P.S-001)
-  const partnerType = response[3];
-  const partnerId = response[4];
-  const partnerName = response[5];
-  const whatsappNumber = response[6];
+  try {
+    // Validate event object
+    if (!e) {
+      throw new Error('Event object is undefined. Function must be called with form submission event data.');
+    }
+    
+    if (!e.values && !e.namedValues) {
+      throw new Error('Event object missing form data. Both e.values and e.namedValues are undefined.');
+    }
+    
+    // Extract form data with fallback handling
+    const response = e.values || [];
+    const timestamp = (response && response[0]) ? response[0] : new Date();
+    
+    // Get submitter email from multiple sources with safe access
+    let submitterEmail = '';
+    if (response && response.length > 1) {
+      submitterEmail = response[1] || '';
+    }
+    
+    if (!submitterEmail && e.namedValues && e.namedValues['Email Address']) {
+      submitterEmail = e.namedValues['Email Address'][0] || '';
+    }
+    
+    if (!submitterEmail && e.response) {
+      submitterEmail = e.response.getRespondentEmail() || '';
+    }
+    
+    if (!submitterEmail) {
+      throw new Error('Cannot determine submitter email from form submission data');
+    }
+    
+    // Safe extraction of form fields
+    const projectId = (response && response[2]) ? response[2] : ''; // This should be a Potential Site ID (e.g., P.S-001)
+    const partnerType = (response && response[3]) ? response[3] : '';
+    const partnerId = (response && response[4]) ? response[4] : '';
+    const partnerName = (response && response[5]) ? response[5] : '';
+    const whatsappNumber = (response && response[6]) ? response[6] : '';
 
-  console.log('Partner Update Form Submission:');
-  console.log('Project ID (should be Potential Site ID):', projectId);
-  console.log('Partner Type:', partnerType);
+    console.log('Partner Update Form Submission:');
+    console.log('Project ID (should be Potential Site ID):', projectId);
+    console.log('Partner Type:', partnerType);
   console.log('Partner ID:', partnerId);
   console.log('Partner Name:', partnerName);
 
@@ -257,6 +278,12 @@ ${whatsappNumber ? `📞 Contact: ${whatsappNumber}` : ''}
   } catch (error) {
     console.error('Error sending partner assignment notifications:', error);
   }
+  
+  } catch (error) {
+    console.error('❌ Error processing Partner Update form submission:', error);
+    Logger.log(`Error processing Partner Update form submission: ${error.toString()}`);
+    throw error;
+  }
 }
 
 /**
@@ -279,18 +306,55 @@ function validatePartnerId(id, type) {
  * @param {Object} e The event object.
  */
 function handlePartnerRegistrationFormSubmit(e) {
-  Logger.log('Partner Registration form submitted');
-  
-  const crmSheet = getSheet(CONFIG.SPREADSHEET_IDS.CRM, CONFIG.SHEET_NAMES.CRM_APPROVALS);
+  try {
+    Logger.log('Partner Registration form submitted');
+    
+    // Validate event object
+    if (!e) {
+      throw new Error('Event object is undefined. Function must be called with form submission event data.');
+    }
+    
+    if (!e.values && !e.namedValues) {
+      throw new Error('Event object missing form data. Both e.values and e.namedValues are undefined.');
+    }
+    
+    const crmSheet = getSheet(CONFIG.SPREADSHEET_IDS.CRM, 'Dashboard');
 
-  const response = e.values;
-  const timestamp = response[0];
-  let submitterEmail = response[1];
-  const partnerType = response[2]; // 'Site Engineer' or 'Partner'
-  const partnerName = response[3];
-  const contactNumber = response[4];
-  const bkashNumber = response[5];
-  const nidNo = response[6];
+    // Ensure headers exist for partner data
+    const headers = CONFIG.SCHEMAS.CRM_APPROVALS || [
+      'Timestamp', 'Email Address', 'Contractor Name', 'Bkash Number', 'Contact Number', 
+      'NID No', 'NID Upload', 'Submission ID', 'Status', 'Notes', 'Partner ID', 'Partner Type', 'WhatsApp Number'
+    ];
+    ensureSheetHeaders(crmSheet, headers, 'partner registration');
+
+    // Extract form data with fallback handling
+    const response = e.values || [];
+    const timestamp = (response && response[0]) ? response[0] : new Date();
+    
+    // Get submitter email with safe access
+    let submitterEmail = '';
+    if (response && response.length > 1) {
+      submitterEmail = response[1] || '';
+    }
+    
+    if (!submitterEmail && e.namedValues && e.namedValues['Email Address']) {
+      submitterEmail = e.namedValues['Email Address'][0] || '';
+    }
+    
+    if (!submitterEmail && e.response) {
+      submitterEmail = e.response.getRespondentEmail() || '';
+    }
+    
+    if (!submitterEmail) {
+      throw new Error('Cannot determine submitter email from form submission data');
+    }
+    
+    // Safe extraction of form fields
+    const partnerType = (response && response[2]) ? response[2] : ''; // 'Site Engineer' or 'Partner'
+    const partnerName = (response && response[3]) ? response[3] : '';
+    const contactNumber = (response && response[4]) ? response[4] : '';
+    const bkashNumber = (response && response[5]) ? response[5] : '';
+    const nidNo = (response && response[6]) ? response[6] : '';
   const nidUpload = response[7];
   const whatsappNumber = response[8]; // Optional
 
@@ -338,33 +402,29 @@ Status: ${status}`;
 
   Logger.log(message);
 
-  // Send WhatsApp notification to submitter
-  try {
-    if (submitterEmail) {
-      const submitterEmployee = findEmployeeByEmail(submitterEmail);
-      if (submitterEmployee && submitterEmployee.whatsappNumber) {
-        const whatsappMessage = `✅ Partner Registration Submitted Successfully!
-
-Partner Details:
-📋 Submission ID: ${submissionId}
-👤 Partner Type: ${partnerType}
-📝 Partner Name: ${partnerName}
-🆔 Partner ID: ${partnerId}
-📞 Contact: ${contactNumber}
-📊 Status: ${status}
-
-Your partner registration has been submitted and is currently under review. You will be notified once the registration is approved.
-
-Thank you for your submission!`;
-
-        sendWhatsAppMessage(submitterEmployee.whatsappNumber, whatsappMessage);
-        Logger.log('WhatsApp notification sent to submitter: ' + submitterEmployee.whatsappNumber);
-      } else {
-        Logger.log('No WhatsApp number found for submitter: ' + submitterEmail);
-      }
+  // Send notifications using centralized notification system
+  const notificationData = {
+    formType: 'PARTNER_REGISTRATION',
+    submitterEmail: submitterEmail,
+    territory: null, // Will be determined from submitter's profile
+    formData: {
+      submissionId: submissionId,
+      partnerType: partnerType,
+      partnerName: partnerName,
+      partnerId: partnerId,
+      contactNumber: contactNumber,
+      bkashNumber: bkashNumber,
+      nidNo: nidNo,
+      status: status
     }
+  };
+  
+  sendFormNotification(notificationData);
+  
   } catch (error) {
-    Logger.log('Error sending WhatsApp notification: ' + error.toString());
+    console.error('❌ Error processing Partner Registration form submission:', error);
+    Logger.log(`Error processing Partner Registration form submission: ${error.toString()}`);
+    throw error;
   }
 }
 
@@ -374,7 +434,26 @@ Thank you for your submission!`;
  * @returns {string|null} The new partner ID or null if type is invalid.
  */
 function generateNextPartnerId(partnerType) {
-  const crmSheet = getSheet(CONFIG.SPREADSHEET_IDS.CRM, CONFIG.SHEET_NAMES.CRM_APPROVALS);
+  const crmSheet = getSheet(CONFIG.SPREADSHEET_IDS.CRM, 'Dashboard');
+  
+  // Ensure headers exist - add if missing
+  if (crmSheet.getLastRow() === 0) {
+    const headers = CONFIG.SCHEMAS.CRM_APPROVALS || [
+      'Timestamp', 'Email Address', 'Contractor Name', 'Bkash Number', 'Contact Number', 
+      'NID No', 'NID Upload', 'Submission ID', 'Status', 'Notes', 'Partner ID', 'Partner Type', 'WhatsApp Number'
+    ];
+    crmSheet.getRange(1, 1, 1, headers.length).setValues([headers]);
+    
+    // Format header row
+    const headerRange = crmSheet.getRange(1, 1, 1, headers.length);
+    headerRange.setFontWeight('bold');
+    headerRange.setBackground('#4285f4');
+    headerRange.setFontColor('white');
+    crmSheet.autoResizeColumns(1, headers.length);
+    
+    console.log('Added headers to Dashboard sheet for partner ID generation');
+  }
+  
   const data = getSheetData(crmSheet);
   
   let prefix;
@@ -422,7 +501,26 @@ function generateNextPartnerId(partnerType) {
  * This function should be run once to update the data.
  */
 function migrateExistingPartners() {
-  const crmSheet = getSheet(CONFIG.SPREADSHEET_IDS.CRM, CONFIG.SHEET_NAMES.CRM_APPROVALS);
+  const crmSheet = getSheet(CONFIG.SPREADSHEET_IDS.CRM, 'Dashboard');
+  
+  // Ensure headers exist - add if missing
+  if (crmSheet.getLastRow() === 0) {
+    const headers = CONFIG.SCHEMAS.CRM_APPROVALS || [
+      'Timestamp', 'Email Address', 'Contractor Name', 'Bkash Number', 'Contact Number', 
+      'NID No', 'NID Upload', 'Submission ID', 'Status', 'Notes', 'Partner ID', 'Partner Type', 'WhatsApp Number'
+    ];
+    crmSheet.getRange(1, 1, 1, headers.length).setValues([headers]);
+    
+    // Format header row
+    const headerRange = crmSheet.getRange(1, 1, 1, headers.length);
+    headerRange.setFontWeight('bold');
+    headerRange.setBackground('#4285f4');
+    headerRange.setFontColor('white');
+    crmSheet.autoResizeColumns(1, headers.length);
+    
+    console.log('Added headers to Dashboard sheet for partner migration');
+  }
+  
   const data = getSheetData(crmSheet);
   const partnerTypeCol = 12; // Assuming column L for Partner Type
   const partnerIdCol = 11;   // Assuming column K for Partner ID
@@ -472,6 +570,7 @@ function migrateExistingPartners() {
 
 /**
  * Finds all employees in a specific territory.
+ * Enhanced to work with both legacy and new territory fields.
  * @param {string} territory The territory to search for.
  * @returns {Array} Array of employee objects in the territory.
  */
@@ -481,23 +580,38 @@ function findEmployeesByTerritory(territory) {
   const employees = [];
 
   for (let i = 1; i < data.length; i++) {
-    if (data[i][11] === territory && data[i][8] === 'Active') { // Territory column and Status column
+    const row = data[i];
+    const status = row[8]; // Status column
+    const legacyTerritory = row[11]; // Legacy territory column
+    const newTerritory = row[16]; // New territory column (if exists)
+    
+    // Check both legacy and new territory fields for backward compatibility
+    if (status === 'Active' && (legacyTerritory === territory || newTerritory === territory)) {
       employees.push({
-        id: data[i][0],
-        name: data[i][1],
-        role: data[i][2],
-        email: data[i][3],
-        contactNumber: data[i][4],
-        whatsappNumber: data[i][5],
-        bkashNumber: data[i][6],
-        nidNo: data[i][7],
-        status: data[i][8],
-        hireDate: data[i][9],
-        company: data[i][10],
-        territory: data[i][11],
-        area: data[i][12],
-        legacyId: data[i][13],
-        notes: data[i][14]
+        id: row[0],
+        name: row[1],
+        role: row[2],
+        email: row[3],
+        contactNumber: row[4],
+        whatsappNumber: row[5],
+        bkashNumber: row[6],
+        nidNo: row[7],
+        status: row[8],
+        hireDate: row[9],
+        company: row[10],
+        territory: row[11], // Legacy territory field
+        area: row[12], // Legacy area field
+        zone: row[13] || '', // New zone field (optional)
+        district: row[14] || '', // New district field (optional)
+        newArea: row[15] || '', // New area field (optional)
+        newTerritory: row[16] || '', // New territory field (optional)
+        bazaar: row[17] || '', // Bazaar field (optional)
+        upazilla: row[18] || '', // Upazilla field (optional)
+        bdTerritory: row[19] || '', // BD Territory field (optional)
+        croTerritory: row[20] || '', // CRO Territory field (optional)
+        businessUnit: row[21] || '', // Business Unit field (optional)
+        legacyId: row[22] || row[13] || '', // Legacy ID field (maintain backward compatibility)
+        notes: row[23] || row[14] || '' // Notes field (maintain backward compatibility)
       });
     }
   }

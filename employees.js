@@ -1,10 +1,24 @@
 /**
- * @fileoverview This file contains employee management functionality.
+ * @fileoverview Employee Management for Internal Staff Only
+ * 
+ * IMPORTANT: This module handles ONLY internal company employees (BDO, CRO, SR, ASM).
+ * 
+ * Business partners, contractors, and clients are managed separately:
+ * - Partners/Contractors → partner.js
+ * - Site Engineers → engineer.js  
+ * - Retailers → retailer.js
+ * - Potential Sites → potential-site.js
+ * 
+ * Employee roles handled here:
+ * - BDO: Business Development Officer
+ * - CRO: Customer Relationship Officer
+ * - SR: Sales Representative 
+ * - ASM: Area Sales Manager
  */
 
 /**
  * Generates the next available employee ID for a given role.
- * @param {string} role The employee role (BDO, CRO, SR, SITE_ENGINEER, PARTNER, RETAILER).
+ * @param {string} role The employee role (BDO, CRO, SR, ASM).
  * @returns {string} The new employee ID.
  */
 function generateNextEmployeeId(role) {
@@ -49,6 +63,26 @@ function addEmployee(employee) {
     return null;
   }
 
+  // Validate and process location data
+  let locationData = {};
+  if (employee.location) {
+    // Validate location requirements for the role
+    const locationValidation = validateLocationForRole(employee.role, employee.location);
+    if (!locationValidation.success) {
+      Logger.log(`Location validation failed: ${locationValidation.messages.join(', ')}`);
+      return null;
+    }
+    
+    // Get complete location hierarchy
+    const completeLocation = getLocationHierarchy(employee.location);
+    if (completeLocation) {
+      locationData = completeLocation;
+    } else {
+      Logger.log(`Could not resolve location hierarchy for: ${JSON.stringify(employee.location)}`);
+      return null;
+    }
+  }
+
   const row = [
     employeeId,
     employee.name,
@@ -60,9 +94,18 @@ function addEmployee(employee) {
     employee.nidNo || '',
     employee.status || 'Active',
     employee.hireDate || new Date().toLocaleDateString(),
-    employee.company || '',
-    employee.territory || '',
-    employee.area || '',
+    employee.company || locationData.businessUnit || '',
+    employee.territory || '', // Legacy territory field
+    employee.area || '', // Legacy area field
+    locationData.zone || '', // New zone field
+    locationData.district || '', // New district field
+    locationData.area || '', // New area field
+    locationData.territory || '', // New territory field
+    locationData.bazaar || '', // Bazaar field
+    locationData.upazilla || '', // Upazilla field
+    locationData.bdTerritory || '', // BD Territory field
+    locationData.croTerritory || '', // CRO Territory field
+    locationData.businessUnit || employee.company || '', // Business Unit field
     employee.legacyId || '',
     employee.notes || ''
   ];
@@ -95,10 +138,19 @@ function findEmployeeById(employeeId) {
         status: data[i][8],
         hireDate: data[i][9],
         company: data[i][10],
-        territory: data[i][11],
-        area: data[i][12],
-        legacyId: data[i][13],
-        notes: data[i][14]
+        territory: data[i][11], // Legacy territory field
+        area: data[i][12], // Legacy area field
+        zone: data[i][13], // New zone field
+        district: data[i][14], // New district field
+        newArea: data[i][15], // New area field
+        newTerritory: data[i][16], // New territory field
+        bazaar: data[i][17], // Bazaar field
+        upazilla: data[i][18], // Upazilla field
+        bdTerritory: data[i][19], // BD Territory field
+        croTerritory: data[i][20], // CRO Territory field
+        businessUnit: data[i][21], // Business Unit field
+        legacyId: data[i][22], // Legacy ID field
+        notes: data[i][23] // Notes field
       };
     }
   }
@@ -128,10 +180,19 @@ function findEmployeeByEmail(email) {
         status: data[i][8],
         hireDate: data[i][9],
         company: data[i][10],
-        territory: data[i][11],
-        area: data[i][12],
-        legacyId: data[i][13],
-        notes: data[i][14]
+        territory: data[i][11], // Legacy territory field
+        area: data[i][12], // Legacy area field
+        zone: data[i][13], // New zone field
+        district: data[i][14], // New district field
+        newArea: data[i][15], // New area field
+        newTerritory: data[i][16], // New territory field
+        bazaar: data[i][17], // Bazaar field
+        upazilla: data[i][18], // Upazilla field
+        bdTerritory: data[i][19], // BD Territory field
+        croTerritory: data[i][20], // CRO Territory field
+        businessUnit: data[i][21], // Business Unit field
+        legacyId: data[i][22], // Legacy ID field
+        notes: data[i][23] // Notes field
       };
     }
   }
@@ -154,10 +215,11 @@ function getEmployeeContactNumber(employeeId) {
 /**
  * Migrates data from legacy sheets to the new centralized employee system.
  * This function should be run once after setting up the new employee system.
+ * NOTE: This only migrates actual employees (internal staff), not business partners/clients.
  */
 function migrateToNewEmployeeSystem() {
   const ui = SpreadsheetApp.getUi();
-  const response = ui.alert('Migration Confirmation', 'This will migrate all existing employee data to the new centralized system. Continue?', ui.ButtonSet.YES_NO);
+  const response = ui.alert('Migration Confirmation', 'This will migrate existing employee data to the new centralized system. Note: This only migrates internal staff, not business partners/clients. Continue?', ui.ButtonSet.YES_NO);
   
   if (response !== ui.Button.YES) {
     return;
@@ -165,86 +227,20 @@ function migrateToNewEmployeeSystem() {
 
   let migratedCount = 0;
 
-  // Migrate CRM Approvals (Partners/Contractors)
-  const crmSheet = getSheet(CONFIG.SPREADSHEET_IDS.CRM, CONFIG.SHEET_NAMES.CRM_APPROVALS);
-  const crmData = getSheetData(crmSheet);
+  // Note: CRM Approvals, Engineer Approvals, and Retailer Approvals contain
+  // business partners/clients, not employees. These should be handled by their
+  // respective partner.js, engineer.js, and retailer.js modules.
   
-  for (let i = 1; i < crmData.length; i++) {
-    const row = crmData[i];
-    if (row[8] === 'Approved') { // Only migrate approved entries
-      const partnerType = row[11] || 'PARTNER'; // Partner Type column
-      const role = partnerType === 'Site Engineer' ? 'SITE_ENGINEER' : 'PARTNER';
-      
-      const employee = {
-        name: row[2], // Contractor Name
-        role: role,
-        email: row[1], // Submitter Email
-        contactNumber: row[4], // Contact Number
-        whatsappNumber: row[12], // WhatsApp Number
-        bkashNumber: row[3], // Bkash Number
-        nidNo: row[5], // NID No
-        status: 'Active',
-        legacyId: row[10], // Partner ID
-        notes: 'Migrated from CRM Approvals'
-      };
-      
-      addEmployee(employee);
-      migratedCount++;
-    }
-  }
-
-  // Migrate Engineer Approvals
-  const engineerSheet = getSheet(CONFIG.SPREADSHEET_IDS.CRM, CONFIG.SHEET_NAMES.ENGINEER_APPROVALS);
-  const engineerData = getSheetData(engineerSheet);
+  // If you have actual employee data in other sheets, add migration logic here
+  // For example:
+  // - Internal staff roster
+  // - HR employee records
+  // - Sales team directories
   
-  for (let i = 1; i < engineerData.length; i++) {
-    const row = engineerData[i];
-    if (row[8] === 'Approved') { // Only migrate approved entries
-      const employee = {
-        name: row[2], // Engineer Name
-        role: 'SITE_ENGINEER',
-        email: row[1], // Submitter Email
-        contactNumber: row[4], // Contact Number
-        whatsappNumber: '', // Not available in engineer approvals
-        bkashNumber: row[3], // Bkash Number
-        nidNo: row[5], // NID No
-        status: 'Active',
-        legacyId: '', // No legacy ID for engineers
-        notes: 'Migrated from Engineer Approvals'
-      };
-      
-      addEmployee(employee);
-      migratedCount++;
-    }
-  }
-
-  // Migrate Retailer Approvals
-  const retailerSheet = getSheet(CONFIG.SPREADSHEET_IDS.CRM, CONFIG.SHEET_NAMES.RETAILER_APPROVALS);
-  const retailerData = getSheetData(retailerSheet);
+  console.log('Employee migration completed. Business partners, contractors, and retailers should be managed through their respective modules.');
   
-  for (let i = 1; i < retailerData.length; i++) {
-    const row = retailerData[i];
-    if (row[7] === 'Approved') { // Only migrate approved entries
-      const employee = {
-        name: row[2], // Retailer Name
-        role: 'RETAILER',
-        email: row[1], // Submitter Email
-        contactNumber: row[3], // Contact Number
-        whatsappNumber: '', // Not available in retailer approvals
-        bkashNumber: '', // Not available in retailer approvals
-        nidNo: row[4], // NID No
-        status: 'Active',
-        legacyId: '', // No legacy ID for retailers
-        notes: 'Migrated from Retailer Approvals'
-      };
-      
-      addEmployee(employee);
-      migratedCount++;
-    }
-  }
-
-  ui.alert('Migration Complete', `Successfully migrated ${migratedCount} employees to the new system.`, ui.ButtonSet.OK);
-  Logger.log(`Migration completed. ${migratedCount} employees migrated.`);
+  ui.alert('Migration Complete', `Successfully migrated ${migratedCount} employees to the new system. Note: Business partners, contractors, and retailers are managed separately through their respective modules.`, ui.ButtonSet.OK);
+  Logger.log(`Employee migration completed. ${migratedCount} employees migrated.`);
 }
 
 /**
@@ -372,13 +368,80 @@ function normalizePhoneNumber(phoneNumber) {
     .replace(/^\+/, ''); // Remove leading +
   
   // Handle Bangladesh country code variations
-  if (normalized.startsWith('88') && normalized.length > 11) {
-    // Already has country code
-    return normalized;
+  if (normalized.startsWith('88') && normalized.length >= 13) {
+    // Already has country code (88 + 11 digits)
+    return normalized.substring(0, 13); // Ensure exactly 13 digits
   } else if (normalized.startsWith('01') && normalized.length === 11) {
     // Local Bangladesh number, add country code
     return '88' + normalized;
+  } else if (normalized.length === 11 && normalized.startsWith('1')) {
+    // Handle missing leading 0 in local number
+    return '8801' + normalized;
+  } else if (normalized.startsWith('8801') && normalized.length === 13) {
+    // Correctly formatted number
+    return normalized;
+  }
+  
+  // Return as-is if doesn't match expected patterns, but log warning
+  if (normalized.length < 11 || normalized.length > 15) {
+    console.warn(`⚠️ Unusual phone number format: ${phoneNumber} -> ${normalized}`);
   }
   
   return normalized;
+}
+
+/**
+ * Validates phone number format for Bangladesh numbers.
+ * 
+ * @param {string} phoneNumber - Phone number to validate
+ * @returns {boolean} True if valid Bangladesh number
+ */
+function isValidBangladeshNumber(phoneNumber) {
+  if (!phoneNumber) return false;
+  
+  const normalized = normalizePhoneNumber(phoneNumber);
+  
+  // Valid patterns for Bangladesh
+  const patterns = [
+    /^88\d{11}$/, // Country code + 11 digits (88 + 01xxxxxxxxx)
+    /^01\d{9}$/, // Local format (01xxxxxxxxx)
+    /^8801\d{9}$/ // Full international format
+  ];
+  
+  return patterns.some(pattern => pattern.test(normalized));
+}
+
+/**
+ * Enhanced phone number formatter for display purposes.
+ * 
+ * @param {string} phoneNumber - Phone number to format
+ * @param {string} format - Format type ('local', 'international', 'display')
+ * @returns {string} Formatted phone number
+ */
+function formatPhoneNumber(phoneNumber, format = 'display') {
+  const normalized = normalizePhoneNumber(phoneNumber);
+  
+  if (!isValidBangladeshNumber(phoneNumber)) {
+    return phoneNumber; // Return original if invalid
+  }
+  
+  // Extract the 11-digit local number
+  let localNumber;
+  if (normalized.startsWith('88')) {
+    localNumber = normalized.substring(2);
+  } else {
+    localNumber = normalized;
+  }
+  
+  switch (format) {
+    case 'local':
+      return localNumber;
+    case 'international':
+      return `+88${localNumber}`;
+    case 'display':
+      // Format as +88 01XXX-XXXXXX
+      return `+88 ${localNumber.substring(0, 3)}-${localNumber.substring(3)}`;
+    default:
+      return normalized;
+  }
 }

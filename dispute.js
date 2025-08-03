@@ -63,7 +63,26 @@ function handleDisputeFormSubmit(e) {
 
   // Helper to find phone number from the CRM sheet by ID or Email
   const getPhoneNumber = (identifier) => {
-    const crmSheet = getSheet(CONFIG.SPREADSHEET_IDS.CRM, CONFIG.SHEET_NAMES.CRM_APPROVALS);
+    const crmSheet = getSheet(CONFIG.SPREADSHEET_IDS.CRM, 'Dashboard');
+    
+    // Ensure headers exist - add if missing
+    if (crmSheet.getLastRow() === 0) {
+      const headers = CONFIG.SCHEMAS.CRM_APPROVALS || [
+        'Timestamp', 'Email Address', 'Contractor Name', 'Bkash Number', 'Contact Number', 
+        'NID No', 'NID Upload', 'Submission ID', 'Status', 'Notes', 'Partner ID', 'Partner Type', 'WhatsApp Number'
+      ];
+      crmSheet.getRange(1, 1, 1, headers.length).setValues([headers]);
+      
+      // Format header row
+      const headerRange = crmSheet.getRange(1, 1, 1, headers.length);
+      headerRange.setFontWeight('bold');
+      headerRange.setBackground('#4285f4');
+      headerRange.setFontColor('white');
+      crmSheet.autoResizeColumns(1, headers.length);
+      
+      console.log('Added headers to Dashboard sheet for dispute lookup');
+    }
+    
     const crmData = getSheetData(crmSheet);
     // Assuming SR contact info is also in CRM sheet, identified by email
     const srSheet = getSheet(CONFIG.SPREADSHEET_IDS.CRM, CONFIG.SHEET_NAMES.SR_REG);

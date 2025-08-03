@@ -7,7 +7,26 @@
  * @param {Object} e The event object.
  */
 function handleEngineerFormSubmit(e) {
-  const crmSheet = getSheet(CONFIG.SPREADSHEET_IDS.CRM, CONFIG.SHEET_NAMES.ENGINEER_APPROVALS);
+  const crmSheet = getSheet(CONFIG.SPREADSHEET_IDS.CRM, 'Dashboard');
+  
+  // Ensure headers exist for engineer data - add if missing
+  if (crmSheet.getLastRow() === 0) {
+    const headers = CONFIG.SCHEMAS.ENGINEER_APPROVALS || [
+      'Timestamp', 'Email Address', 'Engineer Name', 'Bkash Number', 'Contact Number', 
+      'NID No', 'NID Upload', 'Submission ID', 'Status', 'Notes'
+    ];
+    crmSheet.getRange(1, 1, 1, headers.length).setValues([headers]);
+    
+    // Format header row
+    const headerRange = crmSheet.getRange(1, 1, 1, headers.length);
+    headerRange.setFontWeight('bold');
+    headerRange.setBackground('#4285f4');
+    headerRange.setFontColor('white');
+    crmSheet.autoResizeColumns(1, headers.length);
+    
+    console.log('Added engineer headers to Dashboard sheet');
+  }
+  
   const croSheet = getSheet(CONFIG.SPREADSHEET_IDS.CONTRACTOR_REGISTRATION, CONFIG.SHEET_NAMES.CRO_REG);
 
   const response = e.values;
@@ -33,29 +52,24 @@ function handleEngineerFormSubmit(e) {
   const row = [timestamp, submitterEmail, engineerName, mobileNo, addressOrg, designation, district, thana, bdOfficer, idNo, engineerEmail, education, classification, remarks, submissionId, status, notes];
   appendRow(crmSheet, row);
 
-  const croData = getSheetData(croSheet);
-  let croPhone = null;
-  for (let i = 1; i < croData.length; i++) {
-    if (croData[i][0] === submitterEmail) {
-      croPhone = croData[i][2];
-      break;
+  // Send notifications using centralized notification system
+  const notificationData = {
+    formType: 'ENGINEER_REGISTRATION',
+    submitterEmail: submitterEmail,
+    territory: district, // Use district as territory for engineer registration
+    formData: {
+      submissionId: submissionId,
+      engineerName: engineerName,
+      mobileNo: mobileNo,
+      district: district,
+      thana: thana,
+      designation: designation,
+      classification: classification,
+      status: status
     }
-  }
-
-  if (croPhone) {
-    const message = `New Engineer Registration Submission
-Submission ID: ${submissionId}
-Engineer Name: ${engineerName}
-Mobile: ${mobileNo}
-ID No: ${idNo}
-Email: ${engineerEmail}
-District: ${district}
-Thana: ${thana}
-Classification: ${classification}
-Status: ${status}
-Submission Date: ${timestamp}`;
-    sendWhatsAppMessage(croPhone, message);
-  }
+  };
+  
+  sendFormNotification(notificationData);
 }
 
 /**

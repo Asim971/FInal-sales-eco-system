@@ -50,7 +50,46 @@ function getSheetData(sheet) {
  * @param {Array<Object>} row The row to append.
  */
 function appendRow(sheet, row) {
-  sheet.appendRow(row);
+  try {
+    sheet.appendRow(row);
+  } catch (error) {
+    console.error('Error appending row to sheet:', error);
+    throw error;
+  }
+}
+
+/**
+ * Ensures headers exist in a sheet - adds them if missing
+ * @param {Sheet} sheet The sheet object.
+ * @param {Array<string>} headers The header row to add if missing.
+ * @param {string} sheetContext Context description for logging.
+ */
+function ensureSheetHeaders(sheet, headers, sheetContext = '') {
+  try {
+    if (!sheet) {
+      throw new Error('Sheet object is null or undefined');
+    }
+    
+    if (sheet.getLastRow() === 0) {
+      // Sheet is empty, add headers
+      sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
+      
+      // Format header row
+      const headerRange = sheet.getRange(1, 1, 1, headers.length);
+      headerRange.setFontWeight('bold');
+      headerRange.setBackground('#4285f4');
+      headerRange.setFontColor('white');
+      sheet.autoResizeColumns(1, headers.length);
+      
+      console.log(`Added headers to ${sheet.getName()} sheet${sheetContext ? ' for ' + sheetContext : ''}`);
+      return true;
+    }
+    
+    return false; // Headers already exist
+  } catch (error) {
+    console.error(`Error ensuring headers in sheet:`, error);
+    throw error;
+  }
 }
 
 /**

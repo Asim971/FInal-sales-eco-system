@@ -11,6 +11,15 @@ function handleDemandGenerationFormSubmit(e) {
   try {
     console.log('📈 Processing Demand Generation Request...');
     
+    // Validate event object
+    if (!e) {
+      throw new Error('Event object is undefined. Function must be called with form submission event data.');
+    }
+    
+    if (!e.values && !e.namedValues) {
+      throw new Error('Event object missing form data. Both e.values and e.namedValues are undefined.');
+    }
+    
     const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_IDS.CRM);
     const sheet = getOrCreateSheetSafe(
       CONFIG.SPREADSHEET_IDS.CRM,
@@ -21,8 +30,8 @@ function handleDemandGenerationFormSubmit(e) {
     // Generate unique Request ID
     const requestId = generateDemandGenerationRequestId();
     
-    // Extract form data
-    const responses = e.values;
+    // Extract form data with fallback handling
+    const responses = e.values || [];
     
     // DEBUG: Log all form responses to understand the structure
     console.log('Demand Generation Form submission data:');
@@ -30,9 +39,14 @@ function handleDemandGenerationFormSubmit(e) {
     console.log('e.namedValues:', JSON.stringify(e.namedValues || 'Not available'));
     
     // Extract email using the same approach as other forms
-    let submitterEmail = responses[1] || '';
+    let submitterEmail = '';
     
-    // Try to get email from different sources
+    // Try to get email from values array first
+    if (responses && responses.length > 1) {
+      submitterEmail = responses[1] || '';
+    }
+    
+    // Try to get email from different sources if not found
     if (!submitterEmail && e.namedValues && e.namedValues['Email Address']) {
       submitterEmail = e.namedValues['Email Address'][0];
       console.log('Found email in namedValues:', submitterEmail);
@@ -44,18 +58,23 @@ function handleDemandGenerationFormSubmit(e) {
       console.log('Found email from response:', submitterEmail);
     }
     
+    if (!submitterEmail) {
+      throw new Error('Cannot determine submitter email from form submission data');
+    }
+    
     console.log('Final submitter email:', submitterEmail);
     
     // Map form responses based on DEMAND_GENERATION_REQUEST form structure
+    // Handle missing values with safe array access
     const requestData = {
-      timestamp: responses[0] || new Date(),
+      timestamp: (responses && responses[0]) ? responses[0] : new Date(),
       requestId: requestId,
       submitterEmail: submitterEmail,
-      territory: responses[2] || '',
-      bazaar: responses[3] || '',
-      area: responses[4] || '',
-      reason: responses[5] || '',
-      businessUnit: responses[6] || '',
+      territory: (responses && responses[2]) ? responses[2] : '',
+      bazaar: (responses && responses[3]) ? responses[3] : '',
+      area: (responses && responses[4]) ? responses[4] : '',
+      reason: (responses && responses[5]) ? responses[5] : '',
+      businessUnit: (responses && responses[6]) ? responses[6] : '',
       status: 'Pending Review',
       bdInchargeNotes: '',
       approvalDate: '',
@@ -86,8 +105,22 @@ function handleDemandGenerationFormSubmit(e) {
     
     appendRow(sheet, rowData);
     
-    // Send notifications
-    sendDemandGenerationNotifications(requestData);
+    // Send notifications using centralized notification system
+    const notificationData = {
+      formType: 'DEMAND_GENERATION_REQUEST',
+      submitterEmail: requestData.submitterEmail,
+      territory: requestData.territory,
+      formData: {
+        territory: requestData.territory,
+        bazaar: requestData.bazaar,
+        area: requestData.area,
+        reason: requestData.reason,
+        businessUnit: requestData.businessUnit,
+        requestId: requestData.requestId
+      }
+    };
+    
+    sendFormNotification(notificationData);
     
     console.log(`✅ Demand Generation request submitted: ${requestData.requestId} for territory ${requestData.territory}`);
     
